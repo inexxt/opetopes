@@ -1,12 +1,17 @@
 from collections import namedtuple, defaultdict
 import string
 import random
+import functools
+import pdb
+
 
 def flatten(ss):
     return [x for s in ss for x in s]
 
+NAME_LEN = 3
+
 def generate_id():
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(NAME_LEN))
 
 def masks(n):
     if n == 1:
@@ -19,33 +24,58 @@ def unescape(x):
     return x.replace("'", "").replace('"', "")
 
 
+MEMO = set()
+
+def clear_cache():
+    MEMO.clear()
+
+def memoize(f):
+    memo = MEMO
+
+    @functools.wraps(f)
+    def helper(*args, **kwargs):
+        if kwargs["shape"] not in memo:
+            memo.add(kwargs["shape"])
+            f(*args, **kwargs)
+        return
+    return helper
+
+
+def print_debug(parent):
+    pass
+    # print("\t\t\t Parent debug: \n")
+    # print("\t\t", parent.to_string().rep)
+    # print("\n")
+    # for x in Opetope.all_subopetopes(parent):
+    #     print("\t\t", x.to_string().rep)
+    # print("\n")
+
+
 Representation = namedtuple("Representation", ["rep", "mods"])
+Old = namedtuple("Old", ["ins", "out", "in_parents", "out_parents", "inside_names", "level"])
 
 
 class Opetope:
 
 
-    def __init__(self, ins=None, out=None, name=""):
+    def __init__(self, ins=(), out=None, name=""):
         """ins is list of opetopes one level lower,
         out is a single opetope one level lower
         """
         self.name = name
         self.id = name if name else generate_id()
 
-        # modifiers used in degenerations
+        # this keeps track of what was degenerated into this opetope
+        # eg, when ab: a -> b becomes a point, its name is ab, but
+        # its inside_things are {"a", "b", "ab"}. 
+        self.inside_names = ()
+        self.in_parents = ()
+        self.out_parents = ()
+        self.olds_stack = []
 
-        # is this opetope merged into point?
-        self.degenerated = False
-        
-        # if the opetope has only one input, the input and 
-        # output can be glued together, with main opetope arrow
-        # transformed to the main arrow of output
-        self.glued = False
-        
         if out:
             assert isinstance(out, Opetope)
 
-            
             # check that levels are ok
             assert all([i.level == out.level for i in ins])
             self.level = out.level + 1
@@ -55,15 +85,15 @@ class Opetope:
             # check that lower level opetopes really "match"
             self.ins = tuple(ins)
             self.out = out
-            self.subnames = [x.name for x in Opetope.all_subopetopes(self)]
+            for op in self.ins:
+                op.in_parents = (self, *op.in_parents)
+            self.out.out_parents = (self, *self.out.out_parents)
+
         else:
             self.level = 0
-            self.ins = self, 
-            self.out = self
-            self.points = [self.name]
-
-        
-
+            self.ins = ()
+            self.out = -1 # TODO change that - (-1) to not confuse replace_a_by_b, which uses the fact that None is not a valid opetope 
+    
     @staticmethod
     def match(ins, out):
         ins_of_out = set(out.ins)
@@ -80,47 +110,33 @@ class Opetope:
         return self.to_string().rep
     
     def is_gluable(self):
-        return len([x for x in self.ins if not x.degenerated]) == 1
+        return len(self.ins) == 1
 
     def to_string(self, remove_names=False):
-        # if remove_names, returns (opetope without names, "")
-        # else returns (opetope without names, modifiers)
-        # where modifiers are gluations and degenerations
 
         if not self.level:
-            return Representation("*", "") if remove_names else Representation(self.name, "")
-
-        if self.degenerated:
-            if remove_names:
-                return Representation("", "")
-            else:
-                return Representation("", "{}".format("=".join(self.subnames)))
-        if self.glued:
-            if remove_names:
-                return Representation("", "")
-            else:
-                the_only_in = [x for x in self.ins if not x.degenerated][0]
-                return Representation("", "{}|{}|{}".format(self.name, self.out.name, the_only_in.name))
+            return Representation("*", self.inside_names) if remove_names else Representation(self.name, self.inside_names)
 
         ins_strs = []
         modifiers = []
         for i in self.ins:
             i_str, m = i.to_string(remove_names)
             modifiers.append(m)
-            if i_str:
-                ins_strs.append(i_str)
+            ins_strs.append(i_str)
 
         out_str, m = self.out.to_string(remove_names)
         modifiers.append(m)
-        modifiers = [x for x in modifiers if x]
-        modifiers = unescape(str(sorted(modifiers))) if modifiers else ""
+        
+        modifiers.append(self.inside_names)
+        # print("Inside names: {}".format(self.inside_names))
 
-        return Representation(unescape("{} -> {}".format(ins_strs, out_str)), modifiers)
+        modifiers = tuple({m for m in modifiers if m})
+        return Representation(unescape("({}: {} -> {})".format(self.name, ins_strs, out_str)), modifiers)
     
 
     @staticmethod
     def all_subopetopes(opetope):
-        if not opetope.level or opetope.degenerated:
+        if not opetope.level:
             return {opetope}
         
         ins = flatten([Opetope.all_subopetopes(o) for o in opetope.ins])
@@ -128,65 +144,151 @@ class Opetope:
     
     @staticmethod
     def all_subouts(opetope):
-        if not opetope.level or opetope.degenerated:
+        if not opetope.level:
             return {}
         return {opetope.out} | set(flatten([Opetope.all_subouts(o) for o in [*opetope.ins, opetope.out]]))
     
     @staticmethod
     def generate_morphisms(op1, op2):
-        degs = op1.degenerations()
+        degs = Opetope.degenerations(op1)
         subs = Opetope.all_subopetopes(op2)
         
         morphisms = set()
+        # TODO
         
         return {s.shape() for s in subs if s.shape() in degs}
+
+
+    @staticmethod
+    def replace_a_by_b(a=None, b=None, 
+                       only_in_parents=None, 
+                       except_in_parents=None, 
+                       only_out_parents=None,
+                       except_out_parents=None):
+        only_in_parents = only_in_parents or set()
+        except_in_parents = except_in_parents or set()
+        a_in_parents = a.in_parents if a and a.level else {}
+        in_parents = only_in_parents or set(a_in_parents) - except_in_parents
+
+        only_out_parents = only_out_parents or set()
+        except_out_parents = except_out_parents or set()
+        a_out_parents = a.out_parents if a and a.level else {}
+        out_parents = only_out_parents or set(a_out_parents) - except_out_parents
+
+        for p in in_parents:
+            # FIXME so ugly with these set/tuple conversions
+            p.ins = set(p.ins)
+            if a in p.ins or not a:
+                p.ins.discard(a)
+                if b:
+                    p.ins.add(b)
+            p.ins = tuple(p.ins)
+        
+        for p in out_parents: 
+            if a == p.out:
+                if b:
+                    p.out = b
+                else:
+                    # pdb.set_trace()
+                    # print("aaa")
+                    # x = 1
+                    raise Exception("Removing opetope from output")
+
     
+    def glue(self, parent_debug=None):
+        print("gluing ", self.name)
+        print_debug(parent_debug)
+        assert len(self.ins) == 1
+        
+        # backup everything
+        self.olds_stack.append(Old(out=self.out, ins=self.ins, level=self.level, in_parents=self.in_parents, out_parents=self.out_parents, inside_names=self.inside_names))
+        olds = self.olds_stack[-1]
+
+        # opetopes which used input, now use this self
+        Opetope.replace_a_by_b(a=self.ins[0], b=self, except_in_parents={self})
+
+        # opetopes which used output, now use this self
+        Opetope.replace_a_by_b(a=self.out, b=self, except_out_parents={self})
+
+        # opetopes which had this self in inputs, now have this self removed from inputs
+        # opetopes which had this self as output - won't happen, because we only glue opetopes which are not anyone output
+        Opetope.replace_a_by_b(a=self, b=None, only_in_parents=set(self.in_parents))
+
+        # and finally
+        # this self's parents are sum of ins parents, out parents and this self's parents
+        self.in_parents = tuple((set(olds.in_parents) | set(olds.ins[0].in_parents) | set(olds.in_parents)) - {self})
+        self.out_parents = tuple((set(olds.out_parents) | set(olds.ins[0].out_parents) | set(olds.out_parents)) - {self})
+        # this self's level goes -1
+        self.level -= 1
+        # this self's inputs are replaced by self.out inputs
+        self.ins = self.out.ins
+        # this self's out is replaced by self.out output
+        self.out = self.out.out
+        
+
+        # generate new inside_names
+        self.inside_names = (self.name, olds.ins[0].name, olds.out.name, 
+                             *self.inside_names, 
+                             *olds.ins[0].inside_names,
+                             *olds.out.inside_names) # is it even possible to have more inside_names?
+
+        print("glued ", self.name)
+        print_debug(parent_debug)
+
+    def unglue(self, parent_debug=None):
+        print("ungluing ", self.name)
+        print_debug(parent_debug)
+
+        # revert input removing - we don't care about replacing too much, we'll fix it later
+        olds = self.olds_stack.pop()
+        self.ins = olds.ins
+        self.out = olds.out
+        self.level = olds.level
+        self.in_parents = olds.in_parents
+        self.out_parents = olds.out_parents
+        self.inside_names  = olds.inside_names
+
+
+        Opetope.replace_a_by_b(a=self, b=self.ins[0], only_out_parents=set(self.ins[0].out_parents), only_in_parents=set(self.ins[0].in_parents))
+        
+        Opetope.replace_a_by_b(a=self, b=self.out, only_out_parents=set(self.out.out_parents), only_in_parents=set(self.out.in_parents))
+
+        Opetope.replace_a_by_b(None, b=self, only_in_parents=set(self.in_parents), only_out_parents=set(self.out_parents))
+        print("unglued ", self.name)
+        print_debug(parent_debug)
+
+
     @staticmethod
     def degenerations(opetope, remove_names=False):
+        all_degenerations = {opetope.to_string()}
+        Opetope.degenerations_helper(opetope, all_degenerations, opetope, shape=opetope.to_string(), remove_names=remove_names)
+        return all_degenerations
+
+
+
+    @staticmethod
+    @memoize
+    def degenerations_helper(opetope, all_degenerations, parent, shape="", remove_names=False):
         # todo add memoization
+        print("Now looking at;\n\n")
+        print_debug(parent)
+        all_degenerations.add(parent.to_string())
         if not opetope.level:
-            return "*" # ugly, change that later
+            return
         else:
-            degenerations = defaultdict(set)
-            all_subs = Opetope.all_subopetopes(opetope)
-            all_outs = Opetope.all_subouts(opetope)
-            all_degenerable = list(all_subs - all_outs)
+            # FIXME all_subopetopes should memoize things
+            gluable = {x for x in Opetope.all_subopetopes(parent) if x.is_gluable()} - set(Opetope.all_subouts(parent))
             
-            # it doesn't make sense to degenerate points
-            all_degenerable = {a for a in all_degenerable if a.level}
+            for x in sorted(list(gluable), key=lambda x: (len(x.name), x.name)):
+                print("Is gluable? ", x.is_gluable())
+                x.glue(parent_debug=parent)
+                # FIXME i probably want shape to be the shape of the current opetope, to stop recursion as early as possible
+                # but for now, it'll do
+                Opetope.degenerations_helper(opetope, all_degenerations, parent, shape=parent.to_string(), remove_names=remove_names)
+                x.unglue(parent_debug=parent)
+                # x,is_gluable = lambda: False
+        return
 
-            # here we perform all possible degenerations
-            for md in masks(len(all_degenerable)):
-
-                for (x, d) in zip(md, all_degenerable):
-                    d.degenerated = x
-                
-                # now we have to perform all possible gluations
-                all_gluable = [x for x in all_degenerable if x.is_gluable()]
-                if len(all_gluable):
-                    print("Found gluable")
-                for mg in masks(len(all_gluable)):
-                    for (x, d) in zip(mg, all_gluable):
-                        d.glued = x
-
-                    shape, modifiers = opetope.shape(remove_names)
-                    degenerations[shape].add(modifiers)
-                        
-            # clean up
-            for d in all_degenerable:
-                d.degenerated = False
-                d.glued = False
-
-            # unfortunately, in the case of  remove_names, the whole opetope
-            # degenerates just to "" so in this special case 
-            # we have to replace "" with just a point 
-
-            if remove_names:
-                degenerations["*"] = degenerations[""]
-                del degenerations[""]
-
-            return dict(degenerations)
-            
     def shape(self, remove_names=True):
         # "shape" of the opetope: not caring about the names, just the canonical names
         # I may use tree representation in the future
