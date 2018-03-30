@@ -146,7 +146,7 @@ class Face(Opetope):
         self.p2 = p2
 
     def to_string(self, remove_names=False):
-        return "({}, {})\n".format(self.p1.to_string(remove_names), self.p2.to_string(remove_names))
+        return "({}, {})!{}\n".format(self.p1.to_string(remove_names), self.p2.to_string(remove_names), self.level)
 
     
     @staticmethod
