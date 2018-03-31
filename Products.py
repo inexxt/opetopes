@@ -1,28 +1,7 @@
-
-# coding: utf-8
-
-# In[1]:
-#
-# get_ipython().magic('load_ext autoreload')
-# get_ipython().magic('autoreload 2')
-
-
-# In[2]:
-
-# Double induction
-# - over dimension of the opetope
-# - over dimension of the faces 
-
-
-# In[3]:
-
-
 import itertools
 
-from Opetope import Opetope, Face, flatten, clear_cache, MEMO
+from Opetope import Opetope, Face, flatten, clear_cache, MEMO, NegCounter
 
-
-# In[4]:
 
 a = Opetope(name='a')
 b = Opetope(name='b')
@@ -35,16 +14,11 @@ cd2 = Opetope(ins=[c], out=d, name="cd2")
 gamma = Opetope(ins=[cd1], out=cd2, name="gamma")
 
 
-# In[35]:
-
-from collections import Counter
-
-
-# In[36]:
 
 from typing import Set
 from pdb import set_trace
 from typing import List
+
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -58,8 +32,10 @@ def build_possible_opetopes(op, building_blocks, P, Q):
     return results
     
 def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], results, target_out: Face, P: Opetope, Q: Opetope):
-#     set_trace()
-    
+    # extremely ugly, but necessary FIXME
+    if target_out.level < 1:
+        return
+
     if Face.verify_construction(p1=P, p2=Q, ins=used, out=target_out):
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         results.add(new_face)
@@ -78,7 +54,7 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
 #                 print("Used")
                 new_ins = {*current_ins, *b.ins} - {i}
                 new_used = {*used, b}
-                new_blocks = {x for x in building_blocks if x != b}
+                new_blocks = building_blocks - {b}
                 
                 assert len(new_used) > len(used)
                 assert len(new_blocks) < len(building_blocks)
@@ -90,15 +66,18 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     return
     
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
-def product(P: Opetope, Q: Opetope, small_faces: Set[Face]) -> Set[Face]:
-    
+def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
+
+    small_faces = set()
     print("Now analyzing opetopes {} and {}".format(P, Q))
     subs1 = P.all_subopetopes()
     subs2 = Q.all_subopetopes()
 
-    # product is a set of Faces
-    # small_faces, because these are the ones that don't map to whole op1 and whole op2 simultaneously
-    
+    # the goal is to construct big_faces - the faces which map simultaneously to whole op1 and whole op2
+    big_faces = set()
+
+    # we also need small_faces - these are the ones that don't map to whole op1 and whole op2 simultaneously
+
     points = lambda s: {p for p in s if not p.level}
     arrows = lambda s: {p for p in s if p.level == 1}
     small_faces |= {Face.from_point_and_point(s1, s2) for s1 in points(subs1) for s2 in points(subs2)}
@@ -109,12 +88,11 @@ def product(P: Opetope, Q: Opetope, small_faces: Set[Face]) -> Set[Face]:
     # going from the lowest dimension first, since
     s1s2 = sorted(itertools.product(subs1, subs2), key=lambda x: (x[0].level, x[1].level))
     for (s1, s2) in s1s2:
-        if (s1, s2) != (P, Q) and (s1.level, s2.level) >= (1, 1):
-            small_faces |= product(s1, s2, small_faces)
+        if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(1, 1), (0, 1), (0, 0), (1, 1)]:
+            (big, small) = product(s1, s2)
+            small_faces |= big | small # big faces from subopetope are small faces in here
     
-    # now we only have to construct big_faces the faces which map simultaneously to whole op1 and whole op2
     # minimal dimension of such a face is k = max(dim(P), dim(Q))
-    big_faces = set()
     k = max(P.level, Q.level)
     
     # induction on l - dimension of such face
@@ -129,10 +107,10 @@ def product(P: Opetope, Q: Opetope, small_faces: Set[Face]) -> Set[Face]:
         possible_codomains = set()
         # 1) all (l-1)-dimensional big_faces
         possible_codomains |= {f for f in big_faces if f.level == l-1}
-        
+
         if l == k:
-            possible_codomains |= {f for f in small_faces if f.p1 == P and f.p2 == Q}
-        
+            possible_codomains |= {f for f in small_faces if f.p1 == P.out and f.p2 == Q.out}
+
         # 2) if dim(P) <= dim(Q), then it may be a face that maps to P and codomain(Q)
         if P.level < Q.level and l == k:
             possible_codomains |= {f for f in small_faces if f.p1 == P
@@ -141,33 +119,35 @@ def product(P: Opetope, Q: Opetope, small_faces: Set[Face]) -> Set[Face]:
         if Q.level < P.level and l == k:
             possible_codomains |= {f for f in small_faces if f.p1 == P.out
                                                           and f.p2 == Q}
-        
+
+
         # now, for each possible codomain, we build the opetope that contains it
         new_opetopes = set()
         for f in possible_codomains:
             # I think it is enough to build just from the stuff that has the right dimension
             # eg, equal to dim(f)
-            building_blocks = {s for s in small_faces if s.level == f.level and f != s}
+            building_blocks = {s for s in small_faces | big_faces if s.level == f.level and f != s}
             new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q)
         
 
-        if not new_opetopes:
+        if not new_opetopes and l > 1:
             print("No more faces for {} {}".format(P, Q))
-            return small_faces | big_faces
+            return  (big_faces, small_faces)
         
         big_faces |= new_opetopes
         l += 1
 
 
-p = product(ab, gamma, set())
-
-c = Counter()
+b, s = product(ab, gamma)
+p = b | s
+c = NegCounter()
 for x in p:
     c[x.level] += 1
 print(c)
 
 print("Len: ", len(p))
-# print(p)
+print(p)
+# print([(x.ins, x.out) for x in p])
 
 
 

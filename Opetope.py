@@ -1,9 +1,9 @@
-from collections import namedtuple, defaultdict, Counter
+from collections import namedtuple, defaultdict
 import string
 import random
 import functools
 import pdb
-from typing import List
+from typing import List, Iterable
 
 
 def flatten(ss):
@@ -28,6 +28,27 @@ MEMO = set()
 
 def clear_cache():
     MEMO.clear()
+
+
+from collections import Counter
+
+
+class NegCounter(Counter):
+    def __add__(self, other):
+        return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
+    def __sub__(self, other):
+        return NegCounter({x: self.get(x, 0) - other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
+    def __or__(self, other):
+        return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
+    def __and__(self, other):
+        return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
+    def is_empty(self):
+        return all(not v for v in self.values())
+    def __iadd__(self, other):
+        return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
+    def __isub__(self, other):
+        return NegCounter({x: self.get(x, 0) - other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
+
 
 def memoize(f):
     memo = MEMO
@@ -84,12 +105,13 @@ class Opetope:
         # build opetope (ab: [a] -> b) from [(ab: [a] -> b), b]
         # technical detail neede in products
 
-        ins_of_out = Counter(out.ins)
+
+        ins_of_out = NegCounter(out.ins)
         for opetope in ins:
-            ins_of_out -= Counter(opetope.ins)
-            ins_of_out += Counter({opetope.out})
-        ins_of_out -= Counter({out.out})
-        return not ins_of_out
+            ins_of_out = ins_of_out - NegCounter(opetope.ins)
+            ins_of_out = ins_of_out + NegCounter({opetope.out})
+        ins_of_out = ins_of_out - NegCounter({out.out})
+        return ins_of_out.is_empty()
     
     def __str__(self):
         return self.to_string()
@@ -154,7 +176,6 @@ class Opetope:
             # I probably shouldn't contract out... but lets check, maybe #FIXME
             return Opetope(ins=[contract(i) for i in op.ins], out=contract(op.out), name=op.name)
 
-        # FIXME should not remove names
         return contract(op1).to_string() == op2.to_string()
 
     def is_non_degenerated(self):

@@ -1,0 +1,5 @@
+    6   6|    0   0 // { Krotka z opisu ściany w produkcie
+        0|    1   5 // { -.-
+       --|   --  -- // 
+       -1|   -1  -1 // -1 jeśli na dole, 1 jeśli na górze, 0 jeśli flaga, 2 jeśli p-flaga
+        1|    0   0 // wymiar najwyższej niezerowej komórki
