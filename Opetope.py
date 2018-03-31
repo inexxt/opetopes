@@ -170,11 +170,12 @@ class Opetope:
         def contract(op):
             if not op.level:
                 return op
-            if all([i.name == op.name for i in op.ins]) and op.out.name == op.name:
+            out = contract(op.out)
+            ins = [contract(i) for i in op.ins]
+            ins = [i for i in ins if i.level == out.level]
+            if all([i.name == op.name for i in ins]) and out.name == op.name:
                 return contract(op.out)
-
-            # I probably shouldn't contract out... but lets check, maybe #FIXME
-            return Opetope(ins=[contract(i) for i in op.ins], out=contract(op.out), name=op.name)
+            return Opetope(ins=ins, out=out, name=op.name)
 
         return contract(op1).to_string() == op2.to_string()
 
@@ -216,8 +217,10 @@ class Face(Opetope):
                 ins = [get_pxs(i, px) for i in f.ins if i.level == out.level]
                 ins = [i for i in ins if i.is_non_degenerated()]
                 return Opetope(ins=ins, out=out, name=px(f).name)
+
             op1 = get_pxs(face, lambda x: x.p1)
             op2 = get_pxs(face, lambda x: x.p2)
+            print("face")
 
             assert Opetope.is_valid_morphism(op1, p1) and Opetope.is_valid_morphism(op2, p2)
 

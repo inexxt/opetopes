@@ -30,7 +30,10 @@ def build_possible_opetopes(op, building_blocks, P, Q):
     
     DFS({op.out}, set(), building_blocks, results, op, P, Q)
     return results
-    
+
+
+debug_faces = set()
+
 def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], results, target_out: Face, P: Opetope, Q: Opetope):
     # extremely ugly, but necessary FIXME
     if target_out.level < 1:
@@ -39,8 +42,10 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     if Face.verify_construction(p1=P, p2=Q, ins=used, out=target_out):
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         results.add(new_face)
-        print("Found face!!!")
-        print(new_face)
+        if new_face.level == 3:
+            print("Found face!!!")
+            print(new_face.ins, new_face.out)
+            debug_faces.add(new_face)
         return
 
     # ugly hack, but points do not have themselves as outs, so it is needed
@@ -50,7 +55,7 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     for b in building_blocks:
         for i in current_ins:
 #             print("Now focusing on b: {} u: {}".format(b, i))
-            if i.p1 == out(b.p1) and i.p2 == out(b.p2):
+            if i == out(b):
 #                 print("Used")
                 new_ins = {*current_ins, *b.ins} - {i}
                 new_used = {*used, b}
@@ -88,7 +93,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
     # going from the lowest dimension first, since
     s1s2 = sorted(itertools.product(subs1, subs2), key=lambda x: (x[0].level, x[1].level))
     for (s1, s2) in s1s2:
-        if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(1, 1), (0, 1), (0, 0), (1, 1)]:
+        if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(0, 1), (0, 0), (1, 0)]:
             (big, small) = product(s1, s2)
             small_faces |= big | small # big faces from subopetope are small faces in here
     
@@ -98,6 +103,10 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
     # induction on l - dimension of such face
     l = k
 
+    # special case when we product two arrows and there is big face from the beginning - FIXME
+    if P.level == 1 and Q.level == 1:
+        big_faces |= {Face.from_arrow_and_arrow(P, Q)}
+
     # we proceed until there is no new face
     while True:
         # we have constructed all big faces of dimension < l
@@ -106,7 +115,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
         # the possible codomains of such a face are:
         possible_codomains = set()
         # 1) all (l-1)-dimensional big_faces
-        possible_codomains |= {f for f in big_faces if f.level == l-1}
+        possible_codomains |= {f for f in big_faces if f.level == l - 1}
 
         if l == k:
             possible_codomains |= {f for f in small_faces if f.p1 == P.out and f.p2 == Q.out}
@@ -114,7 +123,8 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
         # 2) if dim(P) <= dim(Q), then it may be a face that maps to P and codomain(Q)
         if P.level < Q.level and l == k:
             possible_codomains |= {f for f in small_faces if f.p1 == P
-                                                          and f.p2 == Q.out}
+                                                          and f.p2 == Q.out
+                                                          and f.level == l - 1}
         # 3) if dim(Q) <= dim(P), then it may be a face that maps to Q and codomain(P)
         if Q.level < P.level and l == k:
             possible_codomains |= {f for f in small_faces if f.p1 == P.out
@@ -130,7 +140,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
             new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q)
         
 
-        if not new_opetopes and l > 1:
+        if not new_opetopes and l > 1:  # checking for l > 1 for special case when we product two arrows
             print("No more faces for {} {}".format(P, Q))
             return  (big_faces, small_faces)
         
@@ -144,10 +154,8 @@ c = NegCounter()
 for x in p:
     c[x.level] += 1
 print(c)
+if c[3] != 4:
+    print("AAAA WTF???/")
 
 print("Len: ", len(p))
 print(p)
-# print([(x.ins, x.out) for x in p])
-
-
-
