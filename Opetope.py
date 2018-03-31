@@ -9,7 +9,7 @@ from typing import List, Iterable
 def flatten(ss):
     return [x for s in ss for x in s]
 
-NAME_LEN = 3
+NAME_LEN = 6
 
 def generate_id():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(NAME_LEN))
@@ -62,14 +62,14 @@ def memoize(f):
     return helper
 
 
-def print_debug(op):
-    pass
-    print("\t\t\t Debug:: \n")
-    print("\t\t", op.to_string())
-    print("\t\t\n Subopetopes:\n")
-    for x in Opetope.all_subopetopes(op):
-        print("\t\t", x.to_string())
-    print("\n")
+# def print_debug(op):
+#     pass
+#     print("\t\t\t Debug:: \n")
+#     print("\t\t", op.to_string())
+#     print("\t\t\n Subopetopes:\n")
+#     for x in Opetope.all_subopetopes(op):
+#         print("\t\t", x.to_string())
+#     print("\n")
 
 
 class Opetope:
@@ -220,7 +220,7 @@ class Face(Opetope):
 
             op1 = get_pxs(face, lambda x: x.p1)
             op2 = get_pxs(face, lambda x: x.p2)
-            print("face")
+            # print("face")
 
             assert Opetope.is_valid_morphism(op1, p1) and Opetope.is_valid_morphism(op2, p2)
 
@@ -260,6 +260,6 @@ class Face(Opetope):
     def __hash__(self):
         return hash("{}{}{}{}{}".format(self.p1, 
                                         self.p2, 
-                                        self.ins, 
-                                        self.out, 
+                                        "".join(str(hash(i)) for i in self.ins),
+                                        self.out,
                                         self.name))
