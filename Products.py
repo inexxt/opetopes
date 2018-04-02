@@ -1,12 +1,11 @@
 import itertools
 
-from Opetope import Opetope, Face, flatten, clear_cache, MEMO, NegCounter
+from Opetope import Opetope, Face, flatten, NegCounter
 
 
 from typing import Set
-from pdb import set_trace
-from typing import List
 
+all_results = set()
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -29,8 +28,9 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     if Face.verify_construction(p1=P, p2=Q, ins=used, out=target_out):
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         results.add(new_face)
-        # if new_face.level == 3:
-        #     print("Found face!!!")
+        all_results.add(new_face)
+        print("Current face count: ", len(all_results))
+        #     print("Found face!!! in {} {}".format(P, Q))
         #     print(new_face.ins, new_face.out)
         #     debug_faces.add(new_face)
         return
@@ -39,8 +39,8 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     out = lambda x: x if not x.level else x.out
     
     # if not, we have to iterate through all possible to use opetopes and check each combination recursively
-    for b in building_blocks:
-        for i in current_ins:
+    for b in sorted(building_blocks, key=lambda x: str(x)):
+        for i in sorted(current_ins, key=lambda x: str(x)):
 #             print("Now focusing on b: {} u: {}".format(b, i))
             if i == out(b):
 #                 print("Used")
@@ -60,7 +60,7 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
 def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
-    # print("Now analyzing opetopes {} and {}".format(P, Q))
+    print("Now analyzing opetopes {} and {}".format(P, Q))
     subs1 = P.all_subopetopes()
     subs2 = Q.all_subopetopes()
 
@@ -78,8 +78,8 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
     small_faces |= {Face.from_arrow_and_arrow(s1, s2) for s1 in arrows(subs1) for s2 in arrows(subs2)}
     
     # going from the lowest dimension first
-    s1s2 = sorted(itertools.product(subs1, subs2), key=lambda x: (x[0].level, x[1].level))
-    for (s1, s2) in s1s2:
+    s1s2 = itertools.product(subs1, subs2)
+    for (s1, s2) in sorted(s1s2, key=lambda x: str(x)): # FIXME remove sorted
         if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(0, 1), (0, 0), (1, 0)]:
             (big, small) = product(s1, s2)
             small_faces |= big | small # big faces from subopetope are small faces in here
@@ -121,7 +121,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
         # now, for each possible codomain, we build the opetope that contains it
         new_opetopes = set()
-        for f in possible_codomains:
+        for f in sorted(possible_codomains, key=lambda x: x.to_string()): # FIXME remove sorted
             # I think it is enough to build just from the stuff that has the right dimension
             # eg, equal to dim(f)
             building_blocks = {s for s in small_faces | big_faces if s.level == f.level and f != s}
@@ -129,7 +129,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
         
 
         if not new_opetopes and l > 1:  # checking for l > 1 for special case when we product two arrows
-            print("No more faces for {} {}".format(P, Q))
+            # print("No more faces for {} {}".format(P, Q))
             return  (big_faces, small_faces)
         
         big_faces |= new_opetopes
