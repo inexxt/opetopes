@@ -1,11 +1,12 @@
 import itertools
 
-from Opetope import Opetope, Face, flatten, NegCounter
-
+from Opetope import Opetope, Face, flatten, NegCounter, memoize
 
 from typing import Set
 
 all_results = set()
+
+DEBUG = False
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -29,8 +30,8 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         results.add(new_face)
         all_results.add(new_face)
-        print("Current face count: ", len(all_results))
-        #     print("Found face!!! in {} {}".format(P, Q))
+        if DEBUG:
+            print("Current face count: {} in {} {} current_ins {} used {} target_out {}".format(len(all_results), P, Q, current_ins, used, target_out))
         #     print(new_face.ins, new_face.out)
         #     debug_faces.add(new_face)
         return
@@ -41,7 +42,8 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     # if not, we have to iterate through all possible to use opetopes and check each combination recursively
     for b in sorted(building_blocks, key=lambda x: str(x)):
         for i in sorted(current_ins, key=lambda x: str(x)):
-#             print("Now focusing on b: {} u: {}".format(b, i))
+            if DEBUG:
+                print("Now focusing on b: {} u: {}".format(b, i))
             if i == out(b):
 #                 print("Used")
                 new_ins = {*current_ins, *b.ins} - {i}
@@ -56,11 +58,13 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
                     results=results, 
                     target_out=target_out, P=P, Q=Q)
     return
-    
+
+@memoize
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
 def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
-    print("Now analyzing opetopes {} and {}".format(P, Q))
+    if DEBUG:
+        print("Now analyzing opetopes {} and {}".format(P, Q))
     subs1 = P.all_subopetopes()
     subs2 = Q.all_subopetopes()
 

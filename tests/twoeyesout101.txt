@@ -1,0 +1,519 @@
+/home/jack/anaconda3/bin/python3.6 /home/jack/licencjat/testTwo_eyes.py
+Current face count: 1 in (ab1: [a] -> b) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab1: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 2 in (ab1: [a] -> b) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} target_out ((ab1: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 3 in (ab1: [a] -> b) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {(a, (cd2: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab1: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 4 in (ab1: [a] -> b) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), c)!1
+, (b, (cd2: [c] -> d))!1
+} target_out ((ab1: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 5 in a (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(a, (cd1: [c] -> d))!1
+} target_out (a, (cd2: [c] -> d))!1
+
+Current face count: 6 in b (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, c)!0
+} used {(b, (cd1: [c] -> d))!1
+} target_out (b, (cd2: [c] -> d))!1
+
+Current face count: 7 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!1
+} target_out ((ab1: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 8 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab1: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 9 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} target_out ((ab1: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 10 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 11 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 12 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 13 in (ab1: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} target_out ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 14 in (ab2: [a] -> b) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {((ab2: [a] -> b), d)!1
+, (a, (cd1: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 15 in (ab2: [a] -> b) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab2: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 16 in (ab2: [a] -> b) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {((ab2: [a] -> b), d)!1
+, (a, (cd2: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 17 in (ab2: [a] -> b) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {(b, (cd2: [c] -> d))!1
+, ((ab2: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 18 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 19 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {((ab2: [a] -> b), d)!1
+, (a, (cd1: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 20 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab2: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 21 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab2: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 22 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab2: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 23 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), d)!1
+, (a, (cd1: [c] -> d))!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 24 in (ab2: [a] -> b) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab2: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 25 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) c current_ins {(a, c)!0
+} used {((ab1: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), c)!1
+
+Current face count: 26 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) d current_ins {(a, d)!0
+} used {((ab1: [a] -> b), d)!1
+} target_out ((ab2: [a] -> b), d)!1
+
+Current face count: 27 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 28 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab2: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 29 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), (cd1: [c] -> d))!1
+
+Current face count: 30 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+
+Current face count: 31 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+
+Current face count: 32 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+
+Current face count: 33 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd1: [c] -> d) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+
+Current face count: 34 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 35 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {(a, (cd2: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 36 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), c)!1
+, (b, (cd2: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 37 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {(a, (cd2: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+
+Current face count: 38 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {(a, (cd2: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+
+Current face count: 39 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {((ab1: [a] -> b), c)!1
+, (b, (cd2: [c] -> d))!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+
+Current face count: 40 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (cd2: [c] -> d) current_ins {((ab1: [a] -> b), c)!1
+, (b, (cd2: [c] -> d))!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+
+Current face count: 41 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 42 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 43 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, c)!0
+} used {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} target_out ((ab2: [a] -> b), (cd2: [c] -> d))!1
+
+Current face count: 44 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 44 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 45 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 46 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 47 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 48 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 49 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 50 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 51 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 52 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 53 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(a, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), d)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 54 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 54 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 55 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 56 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 57 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 58 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 59 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 60 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 61 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 62 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 63 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {(b, (cd1: [c] -> d))!1
+, ((ab1: [a] -> b), c)!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 64 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!1
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 65 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!1
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+
+Current face count: 66 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 67 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 68 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 69 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), c)!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 70 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 71 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 72 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 73 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 74 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 75 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+, ((ab1: [a] -> b), (cd2: [c] -> d))!2
+, (b, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 76 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 77 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 78 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 79 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab1: [a] -> b), (cd1: [c] -> d))!2
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((ab1: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 80 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 81 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd1: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 82 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 83 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd1: [c] -> d))!2
+, ((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+, ((ab1: [a] -> b), (cd1: [c] -> d))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 84 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (cd2: [c] -> d))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+Current face count: 85 in (alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)) (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)) current_ins {((ab2: [a] -> b), (cd2: [c] -> d))!2
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), d)!2
+, (a, (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!2
+} used {((ab2: [a] -> b), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+, ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+} target_out ((alpha: [(ab1: [a] -> b)] -> (ab2: [a] -> b)), (gamma: [(cd1: [c] -> d)] -> (cd2: [c] -> d)))!3
+
+{3: 38, 2: 27, 1: 12, 4: 20, 0: 4}
+Len:  101

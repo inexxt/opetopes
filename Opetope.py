@@ -1,5 +1,7 @@
 from typing import List
 
+import functools
+
 
 def flatten(ss):
     return [x for s in ss for x in s]
@@ -25,10 +27,10 @@ def unescape(x):
     return x.replace("'", "").replace('"', "")
 
 # memoization helpers
-# MEMO = set()
-#
-# def clear_cache():
-#     MEMO.clear()
+MEMO = {}
+
+def clear_cache():
+    MEMO.clear()
 
 
 from collections import Counter, Iterable
@@ -85,16 +87,21 @@ class NegCounter():
     def __repr__(self):
         return self.counts.__repr__()
 
-# def memoize(f):
-#     memo = MEMO
-#
-#     @functools.wraps(f)
-#     def helper(*args, **kwargs):
-#         if kwargs["shape"] not in memo:
-#             memo.add(kwargs["shape"])
-#             f(*args, **kwargs)
-#         return
-#     return helper
+def memoize(f):
+    memo = MEMO
+
+    @functools.wraps(f)
+    def helper(*args, **kwargs):
+        PQ = (args[0], args[1])
+        if PQ not in memo:
+            result = f(*args, **kwargs)
+            memo[PQ] = result
+        else:
+            # print("Used memoization")
+            pass
+        return memo[PQ]
+
+    return helper
 
 
 # def print_debug(op):
@@ -120,7 +127,10 @@ class Opetope:
 
             # check that levels are ok
             self.level = out.level + 1
-            assert Opetope.match(ins, out, self.level)
+            if not Opetope.match(ins, out, self.level):
+                print("aaaa") # FIXME
+            Opetope.match(ins, out, self.level)
+
 
             # check that lower level opetopes really "match"
             self.ins = tuple(ins)
@@ -198,10 +208,17 @@ class Opetope:
         pass
     
     def __eq__(self, other):
-        # todo change that, it doesnt take into account that there 
-        # might be different arrows between the same set of objects
-        return str(self) == str(other)
-    
+        return str(self) == str(other) # FIXME
+        if isinstance(self, int) or isinstance(other, int):
+            return str(self) == str(other)
+        if not self.level and not other.level:
+            return self.name == other.name
+        return not {self.ins} ^ {other.ins} and \
+               self.out == other.out
+               # self.name == other.name
+
+        # previously was just but let's keep it verbose for now
+
     def __hash__(self):
         return hash(self.to_string())
 
@@ -216,12 +233,9 @@ class Opetope:
             ins = [contract(i) for i in op.ins]
             ins = [i for i in ins if i.level == out.level]
 
-            if all([i.to_string() == out.to_string() for i in ins]): # and out.name == op.name:
+            if all([i.to_string() == out.to_string() for i in ins]):
                 return contract(op.out)
-            if Opetope.match(ins, out, out.level + 1):
-                return Opetope(ins=ins, out=out, name=op.name)
-            else:
-                print("aaa")
+            return Opetope(ins=ins, out=out, name=op.name)
         op1.name = op2.name # ugly hack because of "abecadło" problem
         return contract(op1).to_string() == op2.to_string()
 
@@ -248,7 +262,7 @@ class Face(Opetope):
 
             return "{}{}{}{}{}".format(self.p1,
                                         self.p2,
-                                        "".join(i.to_string(full=True) for i in self.ins),
+                                        "".join(sorted([i.to_string(full=True) for i in self.ins])),
                                         self.out,
                                         self.name)
 
