@@ -1,0 +1,6 @@
+4          {dimension}
+31       {number of faces}
+31         {top face number}
+Data31cFS.txt  {file with faces structure of an opetope}
+Data31cTr.txt   {file with alphanumeric translation}
+Data31cWalk.txt {file where to put the Top Hamiltonian Path}

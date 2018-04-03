@@ -1,0 +1,6 @@
+4          {dimension}
+21       {number of faces}
+21         {top face number}
+Data21aFS.txt  {file with faces structure of an opetope}
+Data21aTr.txt   {file with alphanumeric translation}
+Data21aWalk.txt {file where to put the Top Hamiltonian Path}

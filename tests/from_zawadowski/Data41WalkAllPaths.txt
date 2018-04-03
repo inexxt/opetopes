@@ -1,0 +1,13 @@
+Number of flags: 1
+    1
+    0
+    1
+   --
+    1
+
+Correct walk!
+
+Top raw - flag number
+Top-1 raw - level of change between flags
+Top-2 raw - sign of the flag
+Remaining raws - the flag

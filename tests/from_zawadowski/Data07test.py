@@ -19,5 +19,5 @@ p = b | s
 c = NegCounter()
 for x in p:
     c[x.level] += 1
-print(c)
+print([(k, v) for k, v in sorted(list(c.counts.items()))])
 print(len(p))

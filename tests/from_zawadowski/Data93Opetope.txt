@@ -1,0 +1,6 @@
+3          {dimension}
+93         {number of faces}
+93         {top face number}
+Data93FS.txt  {file with faces structure of an opetope}
+Data93Tr.txt   {file with alphanumeric translation}
+Data93Walk.txt {file where to put the Top Hamiltonian Path}

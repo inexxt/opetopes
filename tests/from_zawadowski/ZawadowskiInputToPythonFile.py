@@ -37,7 +37,7 @@ print(len(p))
 
 result = []
 with open(FILE + "FS.txt", "r") as f:
-    for l in f.readlines():
+    for l in sorted(f.readlines(), key=lambda x: int(x.split()[0])):
         l = l.replace("\n", "")
         l = l.split(" ")
         name = "a{}".format(l[0])

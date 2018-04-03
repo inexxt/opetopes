@@ -1,0 +1,6 @@
+4          {dimension}
+35        {number of faces}
+35         {top face number}
+Data35FS.txt  {file with faces structure of an opetope}
+Data35Tr.txt   {file with alphanumeric translation}
+Data35Walk.txt {file where to put the Top Hamiltonian Path}

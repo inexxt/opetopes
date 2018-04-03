@@ -1,0 +1,6 @@
+5          {dimension}
+53         {number of faces}
+53         {top face number}
+Data51extFS.txt  {file with faces structure of an opetope}
+Data51extTr.txt   {file with alphanumeric translation}
+Data51extWalk.txt {file where to put the Top Hamiltonian Path}
