@@ -21,6 +21,7 @@ def build_possible_opetopes(op, building_blocks, P, Q):
 
 # debug_faces = set()
 
+@memoize
 def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], results, target_out: Face, P: Opetope, Q: Opetope):
     # extremely ugly, but necessary FIXME
     if target_out.level < 1:

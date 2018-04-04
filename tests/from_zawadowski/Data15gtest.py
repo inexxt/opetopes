@@ -17,8 +17,12 @@ a8 = Opetope(ins=[a6], out=a5, name='a8')
 a9 = Opetope(ins=[a8], out=a7, name='a9')
 a10 = Opetope(ins=[a8], out=a7, name='a10')
 a11 = Opetope(ins=[a10], out=a9, name='a11')
+a12 = Opetope(ins=[a10], out=a9, name='a12')
+a13 = Opetope(ins=[a12], out=a11, name='a13')
+a14 = Opetope(ins=[a12], out=a11, name='a14')
+a15 = Opetope(ins=[a14], out=a13, name='a15')
 
-b, s = product(xy, a11)
+b, s = product(xy, a15)
 p = b | s
 c = NegCounter()
 for x in p:
