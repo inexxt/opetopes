@@ -1,12 +1,13 @@
 import itertools
 
-from Opetope import Opetope, Face, flatten, NegCounter, memoize
+from Opetope import Opetope, Face, flatten, NegCounter
+from memoization import memoize
 
 from typing import Set
 
 all_results = set()
 
-DEBUG = False
+DEBUG = True
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -43,8 +44,8 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     # if not, we have to iterate through all possible to use opetopes and check each combination recursively
     for b in sorted(building_blocks, key=lambda x: str(x)):
         for i in sorted(current_ins, key=lambda x: str(x)):
-            if DEBUG:
-                print("Now focusing on b: {} u: {}".format(b, i))
+            # if DEBUG:
+            #     print("Now focusing on b: {} u: {}".format(b, i))
             if i == out(b):
 #                 print("Used")
                 new_ins = {*current_ins, *b.ins} - {i}
@@ -64,8 +65,8 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
 def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
-    if DEBUG:
-        print("Now analyzing opetopes {} and {}".format(P, Q))
+    # if DEBUG:
+    #     print("Now analyzing opetopes {} and {}".format(P, Q))
     subs1 = P.all_subopetopes()
     subs2 = Q.all_subopetopes()
 

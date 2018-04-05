@@ -13,6 +13,7 @@ alpha = Opetope(ins=[cd1], out=cd2, name="alpha")
 
 b, s = product(ab, alpha)
 p = b | s
+
 c = NegCounter()
 for x in p:
     c[x.level] += 1

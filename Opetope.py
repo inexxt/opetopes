@@ -1,7 +1,3 @@
-from typing import List
-
-import functools
-
 
 def flatten(ss):
     return [x for s in ss for x in s]
@@ -26,14 +22,8 @@ def masks(n):
 def unescape(x):
     return x.replace("'", "").replace('"', "")
 
-# memoization helpers
-MEMO = {}
 
-def clear_cache():
-    MEMO.clear()
-
-
-from collections import Counter, Iterable
+from collections import Iterable
 
 
 # class NegCounter(Counter):
@@ -86,23 +76,6 @@ class NegCounter():
         self.counts[key] = value
     def __repr__(self):
         return self.counts.__repr__()
-
-def memoize(f):
-    memo = MEMO
-
-    @functools.wraps(f)
-    def helper(*args, **kwargs):
-        PQ = (args[0], args[1])
-        if PQ not in memo:
-            result = f(*args, **kwargs)
-            memo[PQ] = result
-        else:
-            # print("Used memoization")
-            pass
-        return memo[PQ]
-
-    return helper
-
 
 # def print_debug(op):
 #     pass
