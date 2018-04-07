@@ -1,5 +1,4 @@
-from collections import Iterable
-from typing import Set
+from typing import Set, Iterable
 
 
 def flatten(ss):
@@ -233,7 +232,7 @@ class Face(Opetope):
         self.p1 = p1
         self.p2 = p2
 
-    def to_string(self, remove_names=False, full=False):
+    def to_string(self, remove_names=False, full=False) -> str:
         if full:
             if not self.level:
                 return "{}{}".format(self.p1, self.p2)
@@ -248,17 +247,15 @@ class Face(Opetope):
 
 
     @staticmethod
-    def verify_construction(p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out = None, name=""):
+    def verify_construction(p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out = None, name="") -> bool:
         if not Opetope.match(ins, out, out.level + 1):
             return False
 
         face = Face(p1, p2, ins, out, name)
 
-        def get_pxs(f: 'Face', px):
+        def get_pxs(f: 'Face', px) -> Opetope:
             if not f.level:
                 return Opetope(name=px(f).name)
-            # if not isinstance(f, Face):
-            #     return f
 
             out = get_pxs(f.out, px)
             ins = [get_pxs(i, px) for i in f.ins if i.level == out.level]
@@ -266,40 +263,39 @@ class Face(Opetope):
 
         op1 = get_pxs(face, lambda x: x.p1)
         op2 = get_pxs(face, lambda x: x.p2)
-        # print("face")
 
+        #FIXME remove these
         op1.name = "abecadło" # I can trust in names of all things below me, but I can't in my name, as in (*)
         op2.name = "abecadło" # I can trust in names of all things below me, but I can't in my name, as in (*)
 
         # We have to check here if this is a valid projection
         # eg if all (recursivly) faces of self, projected on p1, together get us p1
         # and similarly p2
-
         if not (Opetope.is_valid_morphism(op1, p1) and Opetope.is_valid_morphism(op2, p2)):
             return False
 
         return True
 
     @staticmethod
-    def from_point_and_point(p1: 'Opetope', p2: 'Opetope'):
+    def from_point_and_point(p1: 'Opetope', p2: 'Opetope') -> 'Face':
         assert (p1.level, p2.level) == (0, 0)
         return Face(p1, p2)
 
     @staticmethod
-    def from_arrow_and_point(p1: 'Face', p2: 'Face'):
+    def from_arrow_and_point(p1: 'Face', p2: 'Face') -> 'Face':
         assert (p1.level, p2.level) == (1, 0)
         return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2)], 
                             out=Face.from_point_and_point(p1.out, p2))
 
     @staticmethod
-    def from_point_and_arrow(p1: 'Face', p2: 'Face'):
+    def from_point_and_arrow(p1: 'Face', p2: 'Face') -> 'Face':
         assert (p1.level, p2.level) == (0, 1)
         # we can't just use from_arrow_and_point, because the order p1, p2 is important
         return Face(p1, p2, ins=[Face.from_point_and_point(p1, p2.ins[0])], 
                             out=Face.from_point_and_point(p1, p2.out))
 
     @staticmethod
-    def from_arrow_and_arrow(p1: 'Face', p2: 'Face'):
+    def from_arrow_and_arrow(p1: 'Face', p2: 'Face') -> 'Face':
         assert (p1.level, p2.level) == (1, 1)
         return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2.ins[0])], 
                             out=Face.from_point_and_point(p1.out, p2.out))

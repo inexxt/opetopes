@@ -140,3 +140,21 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
         
         big_faces |= new_opetopes
         l += 1
+
+
+class Product:
+    def __init__(self, p1: Opetope, p2: Opetope):
+        b, s = product(p1, p2)
+        self.faces = b | s
+
+    def __repr__(self):
+        c = NegCounter()
+        for x in self.faces:
+            c[x.level] += 1
+        return c
+
+    def __str__(self):
+        return self.__repr__()
+
+    def is_contractible(self):
+        

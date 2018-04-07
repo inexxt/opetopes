@@ -1,5 +1,5 @@
 from Opetope import Opetope, NegCounter
-from Products import product
+from Products import product, DEBUG, Product
 
 a = Opetope(name='a')
 b = Opetope(name='b')
@@ -13,12 +13,7 @@ cd1 = Opetope(ins=[c], out=d, name="cd1")
 cd2 = Opetope(ins=[c], out=d, name="cd2")
 gamma = Opetope(ins=[cd1], out=cd2, name="gamma")
 
-b, s = product(alpha, gamma)
-p = b | s
-c = NegCounter()
-for x in p:
-    c[x.level] += 1
-print(c)
-
-# should be 25
-print("Len: ", len(p))
+p = Product(alpha, gamma)
+print(p)
+# should be 101
+print("Len: ", len(p.faces))
