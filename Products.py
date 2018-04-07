@@ -7,7 +7,7 @@ from typing import Set
 
 all_results = set()
 
-DEBUG = True
+DEBUG = False
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op

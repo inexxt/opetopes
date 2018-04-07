@@ -1,5 +1,12 @@
+from collections import Iterable
+from typing import Set
+
 
 def flatten(ss):
+    """
+    Flatten a list - [[a, b], [c, d]] becomes [a, b, c, d]
+    :param ss: list
+    """
     return [x for s in ss for x in s]
 
 # Generating unique ids not using RNG
@@ -13,6 +20,10 @@ def generate_id(op: 'Opetope'):
 
 
 def masks(n):
+    """
+    Generate all possible bit masks of length n
+    :param n: length
+    """
     if n == 1:
         return [[True], [False]]
     else:
@@ -20,29 +31,19 @@ def masks(n):
         return flatten([[[True] + m, [False] + m] for m in ms])
 
 def unescape(x):
+    """
+    Remove ' and " from the string
+    :param x: string
+    """
     return x.replace("'", "").replace('"', "")
 
 
-from collections import Iterable
-
-
-# class NegCounter(Counter):
-#     def __add__(self, other):
-#         return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
-#     def __sub__(self, other):
-#         return NegCounter({x: self.get(x, 0) - other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
-#     def __or__(self, other):
-#         return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) | set(other.keys())})
-#     def __and__(self, other):
-#         return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
-#     def is_empty(self):
-#         return all(not v for v in self.values())
-#     def __iadd__(self, other):
-#         return NegCounter({x: self.get(x, 0) + other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
-#     def __isub__(self, other):
-#         return NegCounter({x: self.get(x, 0) - other.get(x, 0) for x in set(self.keys()) & set(other.keys())})
-
 class NegCounter():
+    """
+    I had to implement my own Counter class, because the default one doesn't support negative values...
+    Or else, it does, but not consistently.
+    I couldn't imagine how many bugs you could get from this simple fact
+    """
     def __init__(self, obj=None):
         self.counts = {}
         if obj:
@@ -77,21 +78,14 @@ class NegCounter():
     def __repr__(self):
         return self.counts.__repr__()
 
-# def print_debug(op):
-#     pass
-#     print("\t\t\t Debug:: \n")
-#     print("\t\t", op.to_string())
-#     print("\t\t\n Subopetopes:\n")
-#     for x in Opetope.all_subopetopes(op):
-#         print("\t\t", x.to_string())
-#     print("\n")
-
 
 class Opetope:
 
     def __init__(self, ins=(), out=None, name=""):
-        """ins is list of opetopes one level lower,
-        out is a single opetope one level lower
+        """
+        :param ins: An iterable of opetopes one level lower
+        :param out: A single opetope one level lower
+        :param name: Name of this opetope - if not provided, a unique new one will be created
         """
         self.name = name
 
@@ -100,10 +94,7 @@ class Opetope:
 
             # check that levels are ok
             self.level = out.level + 1
-            if not Opetope.match(ins, out, self.level):
-                print("aaaa") # FIXME
-            Opetope.match(ins, out, self.level)
-
+            assert Opetope.match(ins, out, self.level)
 
             # check that lower level opetopes really "match"
             self.ins = tuple(ins)
@@ -117,10 +108,10 @@ class Opetope:
         self.id = name if name else generate_id(self)
 
     @staticmethod
-    def match(ins, out, level):
-        # allow waiting makes it possible to eg
-        # build opetope (ab: [a] -> b) from [(ab: [a] -> b), b]
-        # technical detail neede in products
+    def match(ins, out, level) -> bool:
+        """
+        Check if the out and ins provided match together, to create a new level-dimension opetope
+        """
 
         if level == 0:
             return ins == () and out == None
@@ -138,17 +129,25 @@ class Opetope:
         ins_of_out = ins_of_out - NegCounter({out.out})
         return ins_of_out.is_empty()
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.to_string()
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.to_string()
     
-    def is_unary(self):
+    def is_unary(self) -> bool:
+        """
+        Check if the opetope is unary, eg it has exactly one face in the domain
+        These kind of opetopes can be then degenerated
+        :return:
+        """
         return len(self.ins) == 1
 
-    def to_string(self, remove_names=False):
-        
+    def to_string(self, remove_names=False) -> str:
+        """
+        Return string representation of the opetope
+        :param remove_names: This is used if one want's to have an "abstract" representation of an opetope - just the shape
+        """
         if not self.level:
             return "*" if remove_names else self.name
 
@@ -157,15 +156,15 @@ class Opetope:
         else:
             return unescape("({}: {} -> {})".format(self.name, sorted([i.to_string(remove_names) for i in self.ins]), self.out.to_string(remove_names)))
 
-    def all_subopetopes(self):
+    def all_subopetopes(self) -> 'Set[Opetope]':
         if not self.level:
             return {self}
         
         return set(flatten([o.all_subopetopes() for o in self.ins])) | self.out.all_subopetopes() | {self}
     
-    def all_subouts(self):
+    def all_subouts(self) -> 'Set[Opetope]':
         if not self.level:
-            return {}
+            return set()
         return {self.out} | set(flatten([o.all_subouts() for o in [*self.ins, self.out]]))
 
     def shape(self, remove_names=True):
@@ -190,14 +189,18 @@ class Opetope:
                self.out == other.out
                # self.name == other.name
 
-        # previously was just but let's keep it verbose for now
-
     def __hash__(self):
         return hash(self.to_string())
 
     @staticmethod
-    def is_valid_morphism(op1: 'Opetope', op2: 'Opetope'):
-
+    def is_valid_morphism(op1: 'Opetope', op2: 'Opetope') -> bool:
+        """
+        Check that op1, with vertices colored (named) by vertices of op2, is a valid contraction to op2
+        One problem is that we can't use the top-level name
+        :param op1:
+        :param op2:
+        :return:
+        """
         # contract all things in op1
         def contract(op):
             if not op.level:
@@ -209,6 +212,8 @@ class Opetope:
             if all([i.to_string() == out.to_string() for i in ins]):
                 return contract(op.out)
             return Opetope(ins=ins, out=out, name=op.name)
+
+
         op1.name = op2.name # ugly hack because of "abecadło" problem
         return contract(op1).to_string() == op2.to_string()
 
