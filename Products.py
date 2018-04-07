@@ -157,4 +157,5 @@ class Product:
         return self.__repr__()
 
     def is_contractible(self):
+        all_faces = set(flatten(f.all_subopetopes for f in self.faces))
         
