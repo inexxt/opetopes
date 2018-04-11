@@ -1,66 +1,62 @@
 import itertools
 
-from Opetope import Opetope, Face, flatten, NegCounter, first
-from memoization import memoize
+from fastcache import lru_cache
 
-from typing import Set
+from Opetope import Opetope, Face, flatten, NegCounter, first
+
+from typing import Set, List, Tuple, FrozenSet
 
 all_results = set()
 
-DEBUG = False
+DEBUG = True
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
     # and are constructed only from elems
     
     # and proceed from here by DFS
-    results = set()
-#     print("Starting DFS, out {} blocks {} P {} Q {}".format(op, building_blocks, P, Q))
-    
-    DFS({op.out}, set(), building_blocks, results, op, P, Q)
+    results = DFS(frozenset([op.out]), frozenset(), frozenset(building_blocks), op, P, Q)
     return results
 
-# debug_faces = set()
 
-@memoize
-def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], results, target_out: Face, P: Opetope, Q: Opetope):
-    # extremely ugly, but necessary FIXME
+@lru_cache(maxsize=None)
+def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope):
     if target_out.level < 1:
-        return
+        return set()
 
     if Face.verify_construction(p1=P, p2=Q, ins=used, out=target_out):
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
-        results.add(new_face)
         all_results.add(new_face)
         if DEBUG:
             print("Current face count: {} in {} {} current_ins {} used {} target_out {}".format(len(all_results), P, Q, current_ins, used, target_out))
         #     print(new_face.ins, new_face.out)
         #     debug_faces.add(new_face)
-        return
+        return {new_face}
 
     # ugly hack, but points do not have themselves as outs, so it is needed
     out = lambda x: x if not x.level else x.out
     
     # if not, we have to iterate through all possible to use opetopes and check each combination recursively
+    results = set()
     for b in building_blocks - used:
         for i in current_ins:
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
             if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes():
 #                 print("Used")
-                new_ins = {*current_ins, *b.ins} - {i}
-                new_used = {*used, b}
+                new_ins = frozenset({*current_ins, *b.ins} - {i})
+                new_used = frozenset([*used, b])
                 
                 # assert len(new_used) > len(used)
                 # assert len(new_blocks) < len(building_blocks)
-                DFS(current_ins=new_ins, 
-                    used=new_used, 
-                    building_blocks=building_blocks,
-                    results=results,
-                    target_out=target_out, P=P, Q=Q)
-    return
+                results |= DFS(current_ins=new_ins,
+                            used=new_used,
+                            building_blocks=building_blocks,
+                            target_out=target_out, P=P, Q=Q)
 
-@memoize
+    return results
+
+@lru_cache(maxsize=None)
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
 def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 

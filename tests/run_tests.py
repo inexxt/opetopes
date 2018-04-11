@@ -6,7 +6,7 @@ arrow_tests = ["arrow_tests/" + k for k in sorted(listdir("./arrow_tests")) if k
 
 tests = my_short + arrow_tests[:10]
 
-for t in tests:
+for t in ["11_11.yaml"]:
     print(t)
     _, l, c = run(t)
     assert(c)

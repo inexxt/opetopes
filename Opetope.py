@@ -140,8 +140,8 @@ class Opetope:
         # pre-calculating attributes
         self._shape = self.calculate_shape()
         self._str = self.calculate_to_string()
-        self._all_subopetopes = self.calculate_all_subopetopes()
-        self._all_subouts = self.calculate_all_subouts()
+        self._all_subopetopes = frozenset(self.calculate_all_subopetopes())
+        self._all_subouts = frozenset(self.calculate_all_subouts())
 
     @staticmethod
     def match(ins, out, level) -> bool:
@@ -179,9 +179,6 @@ class Opetope:
         """
         return len(self.ins) == 1
 
-    def to_string(self):
-        return self._str
-
     def calculate_shape(self):
         if not self.level:
             return "*"
@@ -198,16 +195,16 @@ class Opetope:
 
         return unescape("({}: {} -> {})".format(self.name, sorted([i._str for i in self.ins]), self.out._str))
 
-    def calculate_all_subopetopes(self) -> 'Set[Opetope]':
+    def calculate_all_subopetopes(self) -> 'FrozenSet[Opetope]':
         if not self.level:
-            return {self}
+            return frozenset({self})
 
-        return set(flatten([o.all_subopetopes() for o in self.ins])) | self.out.all_subopetopes() | {self}
+        return frozenset(flatten([o.all_subopetopes() for o in self.ins])) | self.out.all_subopetopes() | frozenset({self})
 
-    def calculate_all_subouts(self) -> 'Set[Opetope]':
+    def calculate_all_subouts(self) -> 'FrozenSet[Opetope]':
         if not self.level:
-            return set()
-        return {self.out} | set(flatten([o.all_subouts() for o in [*self.ins, self.out]]))
+            return frozenset()
+        return frozenset({self.out}) | frozenset(flatten([o.all_subouts() for o in [*self.ins, self.out]]))
 
     def all_subopetopes(self):
         return self._all_subopetopes
@@ -285,10 +282,6 @@ class Face(Opetope):
 
         self._str_full = self.calculate_to_string(full=True)
 
-    def to_string(self, full=False):
-        if full:
-            return self._str_full
-        return self._str
 
     def calculate_to_string(self, full=False) -> str:
         if full:
@@ -297,11 +290,11 @@ class Face(Opetope):
 
             return "{}{}{}{}{}".format(self.p1,
                                        self.p2,
-                                       "".join(sorted([i.to_string(full=True) for i in self.ins])),
-                                       self.out,
+                                       "".join(sorted([i._str_full for i in self.ins])),
+                                       self.out._str_full,
                                        self.name)
         else:
-            return "({}, {})!{}\n".format(self.p1.to_string(), self.p2.to_string(), self.level)
+            return "({}, {})!{}\n".format(self.p1._str, self.p2._str, self.level)
 
     @staticmethod
     def verify_construction(p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out=None, name="") -> bool:
@@ -362,3 +355,9 @@ class Face(Opetope):
 
     def __hash__(self):
         return hash(self._str_full)
+
+    def __str__(self):
+        return self._str_full
+
+    def __repr__(self):
+        return self._str_full
