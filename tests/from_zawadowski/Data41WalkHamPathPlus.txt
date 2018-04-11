@@ -1,5 +1,0 @@
-Number of flags and p-falgs: 1
-    1
-   --
-    1
-

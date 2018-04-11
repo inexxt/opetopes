@@ -1,0 +1,10 @@
+first:
+    a: Null
+    b: Null
+    ab1: [[a], b]
+    ab2: [[a], b]
+    alpha: [[ab1], ab2]
+
+options:
+    square: True
+    unique_names: True

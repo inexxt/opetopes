@@ -10,7 +10,7 @@ for l in $(cat AListOfOpetopesSizes.txt); do
 	if [ $SIZE -lt $SMALLER_THAN ] && [ $SIZE -gt 0 ]; then
 		INPUT="/home/jack/licencjat/tests/from_zawadowski/Data${NUM}FS.txt"
 		echo "Number $NUM"
-		python tests/from_zawadowski/ZawadowskiInputToPythonFile.py $INPUT
-		python "/home/jack/licencjat/tests/from_zawadowski/Data${NUM}test.py"
+		python tests/ZawadowskiInputToPythonFile.py $INPUT
+		pypy3 "/home/jack/licencjat/tests/from_zawadowski/Data${NUM}test.py"
 	fi;
 done;

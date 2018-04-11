@@ -14,6 +14,6 @@ cd2 = Opetope(ins=[c], out=d, name="cd2")
 gamma = Opetope(ins=[cd1], out=cd2, name="gamma")
 
 p = Product(alpha, gamma)
-print(p)
+print(p.is_contractible())
 # should be 101
 print("Len: ", len(p.faces))

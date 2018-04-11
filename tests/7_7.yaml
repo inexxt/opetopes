@@ -1,0 +1,12 @@
+first:
+    a: []
+    b: []
+    c: []
+    ab: [[a], b]
+    bc: [[b], c]
+    ac: [[a], c]
+    alpha: [[ab, bc], ac]
+
+options:
+    square: True
+    unique_names: True

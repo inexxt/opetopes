@@ -36,12 +36,22 @@ def unescape(x):
     """
     return x.replace("'", "").replace('"', "")
 
+def first(iterable, default=None):
+    """Return the first element of an iterable or the next element of a generator; or default.
+    From norvig.com"""
+    try:
+        return iterable[0]
+    except IndexError:
+        return default
+    except TypeError:
+        return next(iterable, default)
+
 
 class NegCounter():
     """
     I had to implement my own Counter class, because the default one doesn't support negative values...
     Or else, it does, but not consistently.
-    I couldn't imagine how many bugs you could get from this simple fact
+    I couldn't imagine how many bugs you could get from this simple fact.
     """
     def __init__(self, obj=None):
         self.counts = {}

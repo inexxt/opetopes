@@ -1,6 +1,0 @@
-5          {dimension}
-33       {number of faces}
-33         {top face number}
-Data29dXXFS.txt  {file with faces structure of an opetope}
-Data29dXXTr.txt   {file with alphanumeric translation}
-Data29dXXWalk.txt {file where to put the Top Hamiltonian Pcath}

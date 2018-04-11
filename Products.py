@@ -1,13 +1,13 @@
 import itertools
 
-from Opetope import Opetope, Face, flatten, NegCounter
+from Opetope import Opetope, Face, flatten, NegCounter, first
 from memoization import memoize
 
 from typing import Set
 
 all_results = set()
 
-DEBUG = False
+DEBUG = True
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -151,11 +151,31 @@ class Product:
         c = NegCounter()
         for x in self.faces:
             c[x.level] += 1
-        return c
+        return [(k, c[k]) for k in sorted(c.counts)].__repr__()
 
     def __str__(self):
         return self.__repr__()
 
     def is_contractible(self):
-        all_faces = set(flatten(f.all_subopetopes for f in self.faces))
-        
+        # horn filling
+
+        all_faces = set(flatten(f.all_subopetopes() for f in self.faces))
+        points = {k for k in all_faces if not k.level}
+        # start with any point
+        p = first(iter(points))
+        used = {p}
+        all_faces.remove(p)
+        flag = True # flag indicating whenever something changed in the last loop
+        # add face when all faces in its codomain are already added
+        while flag:
+            flag = False
+            for f in all_faces - points:
+                # if all but one faces are already added
+                if sum(bool(k in used) for k in f.ins) + bool(f.out in used) == len(f.ins):
+                    # add the remaining face and its last face
+                    used.add(f)
+                    used.add(f.out)
+                    used.update(set(f.ins))
+                    flag = True
+            all_faces -= used
+        return not all_faces

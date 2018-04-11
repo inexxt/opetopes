@@ -1,5 +1,5 @@
 from Opetope import Opetope, NegCounter
-from Products import product
+from Products import product, Product
 
 a = Opetope(name='a')
 b = Opetope(name='b')
@@ -9,12 +9,8 @@ c = Opetope(name='c')
 d = Opetope(name='d')
 cd = Opetope(ins=[c], out=d, name="cd1")
 
-b, s = product(ab, cd)
-p = b | s
-c = NegCounter()
-for x in p:
-    c[x.level] += 1
-print(c)
+p = Product(ab, cd)
 
+print(p.is_contractible())
 # should be 11
-print("Len: ", len(p))
+print("Len: ", len(p.faces))
