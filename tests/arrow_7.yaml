@@ -1,0 +1,17 @@
+first:
+    a: []
+    b: []
+    ab: [[a], b]
+
+second:
+    a: []
+    b: []
+    c: []
+    ab: [[a], b]
+    bc: [[b], c]
+    ac: [[a], c]
+    alpha: [[ab, bc], ac]
+
+options:
+    square: False
+    unique_names: True

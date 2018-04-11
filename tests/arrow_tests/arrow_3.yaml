@@ -1,0 +1,13 @@
+first:
+  a1: []
+  a2: []
+  a3:
+  - [a2]
+  - a1
+options: {unique_names: true}
+second:
+  a: []
+  ab:
+  - [a]
+  - b
+  b: []

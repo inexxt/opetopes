@@ -8,8 +8,11 @@ def flatten(ss):
     """
     return [x for s in ss for x in s]
 
+
 # Generating unique ids not using RNG
 ids = []
+
+
 def generate_id(op: 'Opetope'):
     if not op.level:
         return ""
@@ -26,8 +29,9 @@ def masks(n):
     if n == 1:
         return [[True], [False]]
     else:
-        ms = masks(n-1)
+        ms = masks(n - 1)
         return flatten([[[True] + m, [False] + m] for m in ms])
+
 
 def unescape(x):
     """
@@ -35,6 +39,7 @@ def unescape(x):
     :param x: string
     """
     return x.replace("'", "").replace('"', "")
+
 
 def first(iterable, default=None):
     """Return the first element of an iterable or the next element of a generator; or default.
@@ -53,6 +58,7 @@ class NegCounter():
     Or else, it does, but not consistently.
     I couldn't imagine how many bugs you could get from this simple fact.
     """
+
     def __init__(self, obj=None):
         self.counts = {}
         if obj:
@@ -65,25 +71,40 @@ class NegCounter():
                     self.counts[t] = self.counts.get(t, 0) + 1
 
     def __add__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in set(self.counts.keys()) | set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) | set(other.counts.keys())})
+
     def __sub__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) - other.counts.get(x, 0) for x in set(self.counts.keys()) | set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) - other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) | set(other.counts.keys())})
+
     def __or__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in set(self.counts.keys()) | set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) | set(other.counts.keys())})
+
     def __and__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in set(self.counts.keys()) & set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) & set(other.counts.keys())})
+
     def is_empty(self):
         return all(not v for v in self.counts.values())
+
     def __iadd__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in set(self.counts.keys()) & set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) + other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) & set(other.counts.keys())})
+
     def __isub__(self, other):
-        return NegCounter({x: self.counts.get(x, 0) - other.counts.get(x, 0) for x in set(self.counts.keys()) & set(other.counts.keys())})
+        return NegCounter({x: self.counts.get(x, 0) - other.counts.get(x, 0) for x in
+                           set(self.counts.keys()) & set(other.counts.keys())})
+
     def __getitem__(self, item):
         if item not in self.counts:
             self.counts[item] = 0
         return self.counts[item]
+
     def __setitem__(self, key, value):
         self.counts[key] = value
+
     def __repr__(self):
         return self.counts.__repr__()
 
@@ -112,13 +133,13 @@ class Opetope:
         else:
             self.level = 0
             self.ins = ()
-            self.out = -1 # TODO change that - (-1) to not confuse replace_a_by_b, which uses the fact that None is not a valid opetope 
+            self.out = -1  # TODO change that - (-1) to not confuse replace_a_by_b, which uses the fact that None is not a valid opetope
 
         self.id = name if name else generate_id(self)
 
         # pre-calculating attributes
-        self._shape = self.calculate_to_string(remove_names=True)
-        self._str = self.calculate_to_string(remove_names=False)
+        self._shape = self.calculate_shape()
+        self._str = self.calculate_to_string()
         self._all_subopetopes = self.calculate_all_subopetopes()
         self._all_subouts = self.calculate_all_subouts()
 
@@ -138,18 +159,18 @@ class Opetope:
             return False
 
         ins_of_out = NegCounter(out.ins)
-        for opetope in sorted(ins, key=lambda x: str(x)): # FIXME remove sorted
+        for opetope in ins:
             ins_of_out = ins_of_out - NegCounter(opetope.ins)
             ins_of_out = ins_of_out + NegCounter({opetope.out})
         ins_of_out = ins_of_out - NegCounter({out.out})
         return ins_of_out.is_empty()
-    
+
     def __str__(self) -> str:
         return self._str
-    
+
     def __repr__(self) -> str:
         return self._str
-    
+
     def is_unary(self) -> bool:
         """
         Check if the opetope is unary, eg it has exactly one face in the domain
@@ -158,29 +179,29 @@ class Opetope:
         """
         return len(self.ins) == 1
 
-    def to_string(self, remove_names=False):
-        if remove_names:
-            return self._shape
-        else:
-            return self._str
+    def to_string(self):
+        return self._str
 
-    def calculate_to_string(self, remove_names=False) -> str:
+    def calculate_shape(self):
+        if not self.level:
+            return "*"
+
+        return "{} -> {}".format([i._shape for i in self.ins], self.out._shape)
+
+    def calculate_to_string(self) -> str:
         """
         Return string representation of the opetope
         :param remove_names: This is used if one want's to have an "abstract" representation of an opetope - just the shape
         """
         if not self.level:
-            return "*" if remove_names else self.name
+            return self.name
 
-        if remove_names:
-            return unescape("{} -> {}".format([i.to_string(remove_names) for i in self.ins], self.out.to_string(remove_names)))
-        else:
-            return unescape("({}: {} -> {})".format(self.name, sorted([i.to_string(remove_names) for i in self.ins]), self.out.to_string(remove_names)))
+        return unescape("({}: {} -> {})".format(self.name, sorted([i._str for i in self.ins]), self.out._str))
 
     def calculate_all_subopetopes(self) -> 'Set[Opetope]':
         if not self.level:
             return {self}
-        
+
         return set(flatten([o.all_subopetopes() for o in self.ins])) | self.out.all_subopetopes() | {self}
 
     def calculate_all_subouts(self) -> 'Set[Opetope]':
@@ -205,9 +226,9 @@ class Opetope:
     def from_shape(shape):
         # return Opetope with shape specified
         pass
-    
+
     def __eq__(self, other):
-        return str(self) == str(other) # FIXME
+        return str(self) == str(other)  # FIXME
         # if isinstance(self, int) or isinstance(other, int):
         #     return str(self) == str(other)
         # if not self.level and not other.level:
@@ -228,6 +249,7 @@ class Opetope:
         :param op2:
         :return:
         """
+
         # contract all things in op1
         def contract(op):
             if not op.level:
@@ -240,8 +262,7 @@ class Opetope:
                 return contract(op.out)
             return Opetope(ins=ins, out=out, name=op.name)
 
-
-        op1.name = op2.name # FIXME ALARM ugly hack because of "abecadło" problem
+        op1.name = op2.name  # FIXME ALARM ugly hack because of "abecadło" problem
         return contract(op1).to_string() == op2.to_string()
 
     def is_non_degenerated(self):
@@ -253,8 +274,9 @@ class Opetope:
         else:
             return all(i.is_non_degenerated() for i in [*self.ins, self.out])
 
+
 class Face(Opetope):
-    def __init__(self, p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out = None, name=""):
+    def __init__(self, p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out=None, name=""):
         self.p1 = p1
         self.p2 = p2
         self._str_full = ""
@@ -263,30 +285,26 @@ class Face(Opetope):
 
         self._str_full = self.calculate_to_string(full=True)
 
-
-    def to_string(self, remove_names=False, full=False):
+    def to_string(self, full=False):
         if full:
             return self._str_full
-        if remove_names:
-            return self._shape
         return self._str
 
-    def calculate_to_string(self, remove_names=False, full=False) -> str:
+    def calculate_to_string(self, full=False) -> str:
         if full:
             if not self.level:
                 return "{}{}".format(self.p1, self.p2)
 
             return "{}{}{}{}{}".format(self.p1,
-                                        self.p2,
-                                        "".join(sorted([i.to_string(full=True) for i in self.ins])),
-                                        self.out,
-                                        self.name)
+                                       self.p2,
+                                       "".join(sorted([i.to_string(full=True) for i in self.ins])),
+                                       self.out,
+                                       self.name)
         else:
-            return "({}, {})!{}\n".format(self.p1.to_string(remove_names), self.p2.to_string(remove_names), self.level)
-
+            return "({}, {})!{}\n".format(self.p1.to_string(), self.p2.to_string(), self.level)
 
     @staticmethod
-    def verify_construction(p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out = None, name="") -> bool:
+    def verify_construction(p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out=None, name="") -> bool:
         if not Opetope.match(ins, out, out.level + 1):
             return False
 
@@ -298,14 +316,14 @@ class Face(Opetope):
 
             out = get_pxs(f.out, px)
             ins = [get_pxs(i, px) for i in f.ins if i.level == out.level]
-            return Opetope(ins=ins, out=out, name=px(f).name) # (*)
+            return Opetope(ins=ins, out=out, name=px(f).name)  # (*)
 
         op1 = get_pxs(face, lambda x: x.p1)
         op2 = get_pxs(face, lambda x: x.p2)
 
-        #FIXME remove these
-        op1.name = "abecadło" # I can trust in names of all things below me, but I can't in my name, as in (*)
-        op2.name = "abecadło" # I can trust in names of all things below me, but I can't in my name, as in (*)
+        # FIXME remove these
+        op1.name = "abecadło"  # I can trust in names of all things below me, but I can't in my name, as in (*)
+        op2.name = "abecadło"  # I can trust in names of all things below me, but I can't in my name, as in (*)
 
         # We have to check here if this is a valid projection
         # eg if all (recursivly) faces of self, projected on p1, together get us p1
@@ -323,21 +341,21 @@ class Face(Opetope):
     @staticmethod
     def from_arrow_and_point(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (1, 0)
-        return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2)], 
-                            out=Face.from_point_and_point(p1.out, p2))
+        return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2)],
+                    out=Face.from_point_and_point(p1.out, p2))
 
     @staticmethod
     def from_point_and_arrow(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (0, 1)
         # we can't just use from_arrow_and_point, because the order p1, p2 is important
-        return Face(p1, p2, ins=[Face.from_point_and_point(p1, p2.ins[0])], 
-                            out=Face.from_point_and_point(p1, p2.out))
+        return Face(p1, p2, ins=[Face.from_point_and_point(p1, p2.ins[0])],
+                    out=Face.from_point_and_point(p1, p2.out))
 
     @staticmethod
     def from_arrow_and_arrow(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (1, 1)
-        return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2.ins[0])], 
-                            out=Face.from_point_and_point(p1.out, p2.out))
+        return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2.ins[0])],
+                    out=Face.from_point_and_point(p1.out, p2.out))
 
     def __eq__(self, other):
         return hash(self) == hash(other)

@@ -7,7 +7,7 @@ from typing import Set
 
 all_results = set()
 
-DEBUG = True
+DEBUG = False
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -126,7 +126,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
         # now, for each possible codomain, we build the opetope that contains it
         new_opetopes = set()
-        for f in sorted(possible_codomains, key=lambda x: x.to_string()): # FIXME remove sorted
+        for f in possible_codomains:
             # I think it is enough to build just from the stuff that has the right dimension
             # eg, equal to dim(f)
             building_blocks = {s for s in small_faces | big_faces if s.level == f.level and f != s}

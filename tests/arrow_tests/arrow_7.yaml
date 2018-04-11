@@ -1,0 +1,23 @@
+first:
+  a1: []
+  a2: []
+  a3: []
+  a4:
+  - [a3]
+  - a1
+  a5:
+  - [a2]
+  - a1
+  a6:
+  - [a3]
+  - a2
+  a7:
+  - [a5, a6]
+  - a4
+options: {unique_names: true}
+second:
+  a: []
+  ab:
+  - [a]
+  - b
+  b: []
