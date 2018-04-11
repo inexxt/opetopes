@@ -116,6 +116,12 @@ class Opetope:
 
         self.id = name if name else generate_id(self)
 
+        # pre-calculating attributes
+        self._shape = self.calculate_to_string(remove_names=True)
+        self._str = self.calculate_to_string(remove_names=False)
+        self._all_subopetopes = self.calculate_all_subopetopes()
+        self._all_subouts = self.calculate_all_subouts()
+
     @staticmethod
     def match(ins, out, level) -> bool:
         """
@@ -139,10 +145,10 @@ class Opetope:
         return ins_of_out.is_empty()
     
     def __str__(self) -> str:
-        return self.to_string()
+        return self._str
     
     def __repr__(self) -> str:
-        return self.to_string()
+        return self._str
     
     def is_unary(self) -> bool:
         """
@@ -152,7 +158,13 @@ class Opetope:
         """
         return len(self.ins) == 1
 
-    def to_string(self, remove_names=False) -> str:
+    def to_string(self, remove_names=False):
+        if remove_names:
+            return self._shape
+        else:
+            return self._str
+
+    def calculate_to_string(self, remove_names=False) -> str:
         """
         Return string representation of the opetope
         :param remove_names: This is used if one want's to have an "abstract" representation of an opetope - just the shape
@@ -165,23 +177,29 @@ class Opetope:
         else:
             return unescape("({}: {} -> {})".format(self.name, sorted([i.to_string(remove_names) for i in self.ins]), self.out.to_string(remove_names)))
 
-    def all_subopetopes(self) -> 'Set[Opetope]':
+    def calculate_all_subopetopes(self) -> 'Set[Opetope]':
         if not self.level:
             return {self}
         
         return set(flatten([o.all_subopetopes() for o in self.ins])) | self.out.all_subopetopes() | {self}
-    
-    def all_subouts(self) -> 'Set[Opetope]':
+
+    def calculate_all_subouts(self) -> 'Set[Opetope]':
         if not self.level:
             return set()
         return {self.out} | set(flatten([o.all_subouts() for o in [*self.ins, self.out]]))
+
+    def all_subopetopes(self):
+        return self._all_subopetopes
+
+    def all_subouts(self):
+        return self._all_subouts
 
     def shape(self, remove_names=True):
         # "shape" of the opetope: not caring about the names, just the canonical names
         # I may use tree representation in the future
         # but for now, just as a "function"-type
         # returns a Representation(string representation, modifiers)
-        return self.to_string(remove_names)
+        return self._shape
 
     @staticmethod
     def from_shape(shape):
@@ -190,13 +208,13 @@ class Opetope:
     
     def __eq__(self, other):
         return str(self) == str(other) # FIXME
-        if isinstance(self, int) or isinstance(other, int):
-            return str(self) == str(other)
-        if not self.level and not other.level:
-            return self.name == other.name
-        return not {self.ins} ^ {other.ins} and \
-               self.out == other.out
-               # self.name == other.name
+        # if isinstance(self, int) or isinstance(other, int):
+        #     return str(self) == str(other)
+        # if not self.level and not other.level:
+        #     return self.name == other.name
+        # return not {self.ins} ^ {other.ins} and \
+        #        self.out == other.out
+        #        # self.name == other.name
 
     def __hash__(self):
         return hash(self.to_string())
@@ -223,7 +241,7 @@ class Opetope:
             return Opetope(ins=ins, out=out, name=op.name)
 
 
-        op1.name = op2.name # ugly hack because of "abecadło" problem
+        op1.name = op2.name # FIXME ALARM ugly hack because of "abecadło" problem
         return contract(op1).to_string() == op2.to_string()
 
     def is_non_degenerated(self):
@@ -237,12 +255,23 @@ class Opetope:
 
 class Face(Opetope):
     def __init__(self, p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out = None, name=""):
-        super().__init__(ins=ins, out=out, name=name)
-
         self.p1 = p1
         self.p2 = p2
+        self._str_full = ""
 
-    def to_string(self, remove_names=False, full=False) -> str:
+        super().__init__(ins=ins, out=out, name=name)
+
+        self._str_full = self.calculate_to_string(full=True)
+
+
+    def to_string(self, remove_names=False, full=False):
+        if full:
+            return self._str_full
+        if remove_names:
+            return self._shape
+        return self._str
+
+    def calculate_to_string(self, remove_names=False, full=False) -> str:
         if full:
             if not self.level:
                 return "{}{}".format(self.p1, self.p2)
@@ -252,8 +281,8 @@ class Face(Opetope):
                                         "".join(sorted([i.to_string(full=True) for i in self.ins])),
                                         self.out,
                                         self.name)
-
-        return "({}, {})!{}\n".format(self.p1.to_string(remove_names), self.p2.to_string(remove_names), self.level)
+        else:
+            return "({}, {})!{}\n".format(self.p1.to_string(remove_names), self.p2.to_string(remove_names), self.level)
 
 
     @staticmethod
@@ -287,25 +316,25 @@ class Face(Opetope):
         return True
 
     @staticmethod
-    def from_point_and_point(p1: 'Opetope', p2: 'Opetope') -> 'Face':
+    def from_point_and_point(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (0, 0)
         return Face(p1, p2)
 
     @staticmethod
-    def from_arrow_and_point(p1: 'Face', p2: 'Face') -> 'Face':
+    def from_arrow_and_point(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (1, 0)
         return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2)], 
                             out=Face.from_point_and_point(p1.out, p2))
 
     @staticmethod
-    def from_point_and_arrow(p1: 'Face', p2: 'Face') -> 'Face':
+    def from_point_and_arrow(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (0, 1)
         # we can't just use from_arrow_and_point, because the order p1, p2 is important
         return Face(p1, p2, ins=[Face.from_point_and_point(p1, p2.ins[0])], 
                             out=Face.from_point_and_point(p1, p2.out))
 
     @staticmethod
-    def from_arrow_and_arrow(p1: 'Face', p2: 'Face') -> 'Face':
+    def from_arrow_and_arrow(p1: Opetope, p2: Opetope) -> 'Face':
         assert (p1.level, p2.level) == (1, 1)
         return Face(p1, p2, ins=[Face.from_point_and_point(p1.ins[0], p2.ins[0])], 
                             out=Face.from_point_and_point(p1.out, p2.out))
@@ -314,4 +343,4 @@ class Face(Opetope):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash(self.to_string(full=True))
+        return hash(self._str_full)

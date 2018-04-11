@@ -42,22 +42,21 @@ def DFS(current_ins: Set[Face], used: Set[Face], building_blocks: Set[Face], res
     out = lambda x: x if not x.level else x.out
     
     # if not, we have to iterate through all possible to use opetopes and check each combination recursively
-    for b in sorted(building_blocks, key=lambda x: str(x)):
-        for i in sorted(current_ins, key=lambda x: str(x)):
+    for b in building_blocks - used:
+        for i in current_ins:
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
-            if i == out(b):
+            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes():
 #                 print("Used")
                 new_ins = {*current_ins, *b.ins} - {i}
                 new_used = {*used, b}
-                new_blocks = building_blocks - {b}
                 
-                assert len(new_used) > len(used)
-                assert len(new_blocks) < len(building_blocks)
+                # assert len(new_used) > len(used)
+                # assert len(new_blocks) < len(building_blocks)
                 DFS(current_ins=new_ins, 
                     used=new_used, 
-                    building_blocks=new_blocks, 
-                    results=results, 
+                    building_blocks=building_blocks,
+                    results=results,
                     target_out=target_out, P=P, Q=Q)
     return
 

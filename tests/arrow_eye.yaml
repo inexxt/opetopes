@@ -1,10 +1,15 @@
 first:
     a: []
     b: []
+    ab: [[a], b]
+
+second:
+    a: []
+    b: []
     ab1: [[a], b]
     ab2: [[a], b]
     alpha: [[ab1], ab2]
 
 options:
-    square: True
+    square: False
     unique_names: True

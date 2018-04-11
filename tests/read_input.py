@@ -7,7 +7,7 @@ from Opetope import Opetope
 from Products import Product
 from toposort import toposort_flatten
 
-with open("7_7.yaml", 'r') as stream:
+with open("arrow_eye.yaml", 'r') as stream:
     desc = yaml.load(stream)
 
 options = desc["options"]

@@ -6,7 +6,7 @@ first:
     e: []
     ab: [[a], b]
     bc: [[b], c]
-    cd: [[a], c]
+    cd: [[c], d]
     de: [[d], e]
     ae: [[a], e]
     alpha: [[ab, bc, cd, de], ae]
