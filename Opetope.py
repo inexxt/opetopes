@@ -238,7 +238,7 @@ class Opetope:
         #        # self.name == other.name
 
     def __hash__(self):
-        return hash(self.to_string())
+        return hash(self._str)
 
     @staticmethod
     def is_valid_morphism(op1: 'Opetope', op2: 'Opetope') -> bool:
@@ -258,12 +258,12 @@ class Opetope:
             ins = [contract(i) for i in op.ins]
             ins = [i for i in ins if i.level == out.level]
 
-            if all([i.to_string() == out.to_string() for i in ins]):
+            if all([i._str == out._str for i in ins]):
                 return contract(op.out)
             return Opetope(ins=ins, out=out, name=op.name)
 
         op1.name = op2.name  # FIXME ALARM ugly hack because of "abecadło" problem
-        return contract(op1).to_string() == op2.to_string()
+        return contract(op1)._str == op2._str
 
     def is_non_degenerated(self):
         # basically not having loops

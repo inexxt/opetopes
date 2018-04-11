@@ -63,10 +63,10 @@ def run(test_path):
     s_ope = create_opetope(snd)
 
     prod = Product(f_ope, s_ope)
-    print(prod)
-    print(len(prod.faces))
-    print(prod.is_contractible())
+    return prod, len(prod.faces), prod.is_contractible()
 
 
 if __name__=="__main__":
-    run(sys.argv[1])
+    _, l, c = run(sys.argv[1])
+    print(l)
+    print(c)

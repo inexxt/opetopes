@@ -84,7 +84,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
     
     # going from the lowest dimension first
     s1s2 = itertools.product(subs1, subs2)
-    for (s1, s2) in sorted(s1s2, key=lambda x: str(x)): # FIXME remove sorted
+    for (s1, s2) in s1s2: # FIXME remove sorted
         if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(0, 1), (0, 0), (1, 0)]:
             (big, small) = product(s1, s2)
             small_faces |= big | small # big faces from subopetope are small faces in here
