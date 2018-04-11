@@ -1,6 +1,8 @@
 import itertools
-
-from fastcache import lru_cache
+try:
+    from fastcache import lru_cache
+except:
+    from functools import lru_cache
 
 from Opetope import Opetope, Face, flatten, NegCounter, first
 
