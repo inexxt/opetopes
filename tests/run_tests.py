@@ -7,8 +7,9 @@ arrow_tests = ["arrow_tests/" + k for k in sorted(listdir("./arrow_tests")) if k
 
 tests = my_short + arrow_tests[:10]
 
-for t in ["2eye_2eye.yaml"]:
+for t in ["7_7.yaml"]:
     print(t)
-    _, l, c = run(t)
-    assert(c)
+    prod, l, c = run(t)
+    print(prod)
+    print(c)
     print(l)

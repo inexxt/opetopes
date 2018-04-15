@@ -9,23 +9,26 @@ except:
 
 from Opetope import Opetope, Face, flatten, NegCounter, first
 
-from typing import Set, List, Tuple, FrozenSet
+from typing import Set, List, Tuple, FrozenSet, Dict
 
 all_results = set()
 
-DEBUG = False
+DEBUG = True
 
-def build_possible_opetopes(op, building_blocks, P, Q):
+def build_possible_opetopes(op, building_blocks, P, Q, orderP, orderQ):
     # build all possible opetopes which have the codomain == op
     # and are constructed only from elems
     
     # and proceed from here by DFS
-    results = DFS(frozenset([op.out]), frozenset(), frozenset(building_blocks), op, P, Q)
+    results = DFS(frozenset([op.out]), frozenset(), frozenset(building_blocks), op, P, Q, orderP, orderQ)
     return results
 
 
 @lru_cache(maxsize=None)
-def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope):
+def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope, orderP, orderQ):
+    d_orderP = dict(orderP)
+    d_orderQ = dict(orderQ)
+
     if target_out.level < 1:
         return set()
 
@@ -48,6 +51,10 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
             if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes():
+                if not ((all(any((bi, ti) in d_orderP[bi.level] for ti in target_out.p1.ins) for bi in b.p1.ins) or b.p1.level < target_out.p1.level) and \
+                        (all(any((bi, ti) in d_orderQ[bi.level] for ti in target_out.p2.ins) for bi in b.p2.ins) or b.p2.level < target_out.p2.level)):
+                    continue
+
 #                 print("Used")
                 new_ins = frozenset({*current_ins, *b.ins} - {i})
                 new_used = frozenset([*used, b])
@@ -57,13 +64,13 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
                 results |= DFS(current_ins=new_ins,
                             used=new_used,
                             building_blocks=building_blocks,
-                            target_out=target_out, P=P, Q=Q)
+                            target_out=target_out, P=P, Q=Q, orderP=orderP, orderQ=orderQ)
 
     return results
 
 @lru_cache(maxsize=None)
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
-def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
+def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
 
     # if DEBUG:
     #     print("Now analyzing opetopes {} and {}".format(P, Q))
@@ -87,7 +94,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
     s1s2 = itertools.product(subs1, subs2)
     for (s1, s2) in s1s2: # FIXME remove sorted
         if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(0, 1), (0, 0), (1, 0)]:
-            (big, small) = product(s1, s2)
+            (big, small) = product(s1, s2, orderP, orderQ)
             small_faces |= big | small # big faces from subopetope are small faces in here
     
     # minimal dimension of such a face is k = max(dim(P), dim(Q))
@@ -131,7 +138,7 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
             # I think it is enough to build just from the stuff that has the right dimension
             # eg, equal to dim(f)
             building_blocks = {s for s in small_faces | big_faces if s.level == f.level and f != s}
-            new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q)
+            new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q, orderP=orderP, orderQ=orderQ)
         
 
         if not new_opetopes and l > 1:  # checking for l > 1 for special case when we product two arrows
@@ -160,10 +167,13 @@ def transitive_reflexive_closure(relation: Set):
 
 class Product:
     def __init__(self, p1: Opetope, p2: Opetope):
-        splus_order_p1 = Product.calculate_splus_order(p1)
-        splus_order_p2 = Product.calculate_splus_order(p2)
+        order1 = Product.calculate_splus_order(p1)
+        order2 = Product.calculate_splus_order(p2)
 
-        b, s = product(p1, p2)
+        def dtoh(d: Dict):
+            return tuple([(k, frozenset(v)) for k, v in d.items()])
+
+        b, s = product(p1, p2, dtoh(order1), dtoh(order2))
         self.faces = b | s
 
     def __repr__(self):

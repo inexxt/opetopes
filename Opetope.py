@@ -185,7 +185,7 @@ class Opetope:
         if not self.level:
             return "*"
 
-        return "{} -> {}".format([i._shape for i in self.ins], self.out._shape)
+        return "({} -> {})".format([i._shape for i in self.ins], self.out._shape)
 
     def calculate_to_string(self) -> str:
         """
@@ -362,7 +362,7 @@ class Face(Opetope):
         return hash(self._str_full)
 
     def __str__(self):
-        return self._str_full
+        return self._str
 
     def __repr__(self):
-        return self._str_full
+        return self._str
