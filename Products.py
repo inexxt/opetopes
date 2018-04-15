@@ -1,4 +1,7 @@
 import itertools
+
+from collections import defaultdict
+
 try:
     from fastcache import lru_cache
 except:
@@ -10,7 +13,7 @@ from typing import Set, List, Tuple, FrozenSet
 
 all_results = set()
 
-DEBUG = True
+DEBUG = False
 
 def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
@@ -30,7 +33,7 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         all_results.add(new_face)
         if DEBUG:
-            print("Current face count: {} in {} {} current_ins {} used {} target_out {}".format(len(all_results), P, Q, current_ins, used, target_out))
+            print("Current face count: {}".format(len(all_results)))
         #     print(new_face.ins, new_face.out)
         #     debug_faces.add(new_face)
         return {new_face}
@@ -139,8 +142,27 @@ def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
         l += 1
 
 
+def transitive_reflexive_closure(relation: Set):
+    closed_rel = set()
+    closed_rel |= relation
+
+    while True:
+        added_elems = {(x, z) for (x, y) in closed_rel for (w, z) in closed_rel if y == w}
+        if not added_elems - closed_rel:
+            break
+        closed_rel |= added_elems
+
+    closed_rel |= {(x, x) for (x, _) in closed_rel}
+    closed_rel |= {(x, x) for (_, x) in closed_rel}
+
+    return closed_rel
+
+
 class Product:
     def __init__(self, p1: Opetope, p2: Opetope):
+        splus_order_p1 = Product.calculate_splus_order(p1)
+        splus_order_p2 = Product.calculate_splus_order(p2)
+
         b, s = product(p1, p2)
         self.faces = b | s
 
@@ -176,3 +198,20 @@ class Product:
                     flag = True
             all_faces -= used
         return not all_faces
+
+    @staticmethod
+    def calculate_splus_order(opetope):
+        """"partial order on subopetopes of equal dimension
+        x <= y, x.level == y.level =: p if there is a sequence of opetopes o_1, ... o_n of levels p + 1, such that
+         - o_(k+1).out in o_k.ins
+         - y in o_n.ins
+         - x == o_1.out
+        + transitive-reflexive closure of said relation"""
+        ordering = defaultdict(set)
+
+        for sub_ope in opetope.all_subopetopes():
+            if sub_ope.level:
+                ordering[sub_ope.level - 1] |= {(sub_ope.out, i) for i in sub_ope.ins}
+            ordering[sub_ope.level] |= {(sub_ope, sub_ope)}
+
+        return {k: transitive_reflexive_closure(r) for k, r in ordering.items()}

@@ -111,6 +111,8 @@ class NegCounter():
 
 class Opetope:
 
+    __slots__ = ["name", "level", "ins", "out", "_shape", "_str", "_all_subopetopes", "_all_subouts", "id", "splus_order"]
+
     def __init__(self, ins=(), out=None, name=""):
         """
         :param ins: An iterable of opetopes one level lower
@@ -273,6 +275,9 @@ class Opetope:
 
 
 class Face(Opetope):
+
+    __slots__ = ["p1", "p2", "_str_full"]
+
     def __init__(self, p1: Opetope, p2: Opetope, ins: 'Iterable[Face]' = (), out=None, name=""):
         self.p1 = p1
         self.p2 = p2
