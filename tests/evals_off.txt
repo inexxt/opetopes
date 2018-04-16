@@ -1,0 +1,95 @@
+arrow_arrow.yaml
+Evals  6
+[(0, 4), (1, 5), (2, 2)]
+True
+11
+arrow_7.yaml
+Evals  117
+[(0, 6), (1, 12), (2, 13), (3, 6)]
+True
+37
+eye_eye.yaml
+Evals  892
+[(0, 4), (1, 12), (2, 27), (3, 38), (4, 20)]
+True
+101
+arrow_eye.yaml
+Evals  947
+[(0, 4), (1, 8), (2, 9), (3, 4)]
+True
+25
+7_7.yaml
+Evals  4329
+[(0, 9), (1, 27), (2, 67), (3, 108), (4, 60)]
+True
+271
+9_9.yaml
+Evals  41468
+[(0, 16), (1, 48), (2, 159), (3, 346), (4, 316), (5, 96)]
+True
+981
+eye_2eye.yaml
+Evals  41468
+[(0, 4), (1, 12), (2, 27), (3, 38), (4, 20)]
+True
+101
+arrow_tests/arrow_07X.yaml
+Evals  41819
+[(0, 4), (1, 11), (2, 21), (3, 25), (4, 12)]
+True
+73
+arrow_tests/arrow_07g.yaml
+Evals  42013
+[(0, 4), (1, 8), (2, 14), (3, 17), (4, 8)]
+True
+51
+arrow_tests/arrow_09a.yaml
+Evals  42013
+[(0, 4), (1, 11), (2, 21), (3, 25), (4, 12)]
+True
+73
+arrow_tests/arrow_09g.yaml
+Evals  42493
+[(0, 4), (1, 8), (2, 14), (3, 26), (4, 33), (5, 16)]
+True
+101
+arrow_tests/arrow_11.yaml
+Evals  43064
+[(0, 6), (1, 15), (2, 27), (3, 33), (4, 16)]
+True
+97
+arrow_tests/arrow_11a.yaml
+Evals  43347
+[(0, 10), (1, 20), (2, 21), (3, 10)]
+True
+61
+arrow_tests/arrow_11b.yaml
+Evals  43948
+[(0, 6), (1, 15), (2, 27), (3, 33), (4, 16)]
+True
+97
+arrow_tests/arrow_11g.yaml
+Evals  44996
+[(0, 4), (1, 8), (2, 14), (3, 26), (4, 50), (5, 65), (6, 32)]
+True
+199
+arrow_tests/arrow_11s.yaml
+Evals  45829
+[(0, 4), (1, 8), (2, 19), (3, 39), (4, 49), (5, 24)]
+True
+143
+arrow_tests/arrow_11x.yaml
+Evals  47155
+[(0, 4), (1, 11), (2, 26), (3, 51), (4, 65), (5, 32)]
+True
+189
+arrow_tests/arrow_13.yaml
+Evals  48040
+[(0, 8), (1, 19), (2, 33), (3, 41), (4, 20)]
+True
+121
+arrow_tests/arrow_13X.yaml
+Evals  50051
+[(0, 4), (1, 14), (2, 33), (3, 63), (4, 81), (5, 40)]
+True
+235

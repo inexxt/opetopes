@@ -12,8 +12,11 @@ from Opetope import Opetope, Face, flatten, NegCounter, first
 from typing import Set, List, Tuple, FrozenSet, Dict
 
 all_results = set()
+all_missed = []
+all_not_missed = []
 
-DEBUG = True
+
+DEBUG = False
 
 def build_possible_opetopes(op, building_blocks, P, Q, orderP, orderQ):
     # build all possible opetopes which have the codomain == op
@@ -50,12 +53,12 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
         for i in current_ins:
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
-            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes():
-                if not ((all(any((bi, ti) in d_orderP[bi.level] for ti in target_out.p1.ins) for bi in b.p1.ins) or b.p1.level < target_out.p1.level) and \
-                        (all(any((bi, ti) in d_orderQ[bi.level] for ti in target_out.p2.ins) for bi in b.p2.ins) or b.p2.level < target_out.p2.level)):
+            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes() and True:
+                if not ((b.p1.level < target_out.p1.level or all(any((bi, ti) in d_orderP[bi.level] for ti in target_out.p1.ins) for bi in b.p1.ins)) and \
+                    (b.p2.level < target_out.p2.level or all(any((bi, ti) in d_orderQ[bi.level] for ti in target_out.p2.ins) for bi in b.p2.ins))):
                     continue
 
-#                 print("Used")
+                all_missed.append(1)
                 new_ins = frozenset({*current_ins, *b.ins} - {i})
                 new_used = frozenset([*used, b])
                 
@@ -169,12 +172,14 @@ class Product:
     def __init__(self, p1: Opetope, p2: Opetope):
         order1 = Product.calculate_splus_order(p1)
         order2 = Product.calculate_splus_order(p2)
+        # order1, order2 = {}, {}
 
         def dtoh(d: Dict):
             return tuple([(k, frozenset(v)) for k, v in d.items()])
 
         b, s = product(p1, p2, dtoh(order1), dtoh(order2))
         self.faces = b | s
+        print("Evals ", len(all_missed))
 
     def __repr__(self):
         c = NegCounter()

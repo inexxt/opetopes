@@ -19,6 +19,9 @@ Optymalizacje:
  OK, ?x - doklejanie tylko tych, które się rzutują na P i Q
  OK, 2x - przetestować pypy - pypy3 3,78s, python3 7,24s (na 7_7.yaml)
  OK, 1.33x -  lru_cache - pypy 2,83s / fastcache.lru_cache - 3,84s
+ OK, 1 - dodanie porządku <+  - nic nie wnosi, przynajmniej w aktualnej wersji (tzn mając mismatch leveli, pomijam sprawdzenie) - ucina jakieś 1% wywołań rekurencji
 
+
+255/259s z włączonym ucianiem
 
 FIXME ALARM - Opetop jest modyfikowany z powodu "abecadło problem"
