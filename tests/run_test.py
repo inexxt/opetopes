@@ -67,6 +67,9 @@ def run(test_path):
 
 
 if __name__=="__main__":
-    _, l, c = run(sys.argv[1])
+    prod, l, c = run(sys.argv[1])
+    print(prod)
     print(l)
     print(c)
+
+    prod.save()

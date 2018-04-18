@@ -11,6 +11,11 @@ from Opetope import Opetope, Face, flatten, NegCounter, first
 
 from typing import Set, List, Tuple, FrozenSet, Dict
 
+import pickle
+import os
+
+
+
 all_results = set()
 all_missed = []
 all_not_missed = []
@@ -170,11 +175,15 @@ def transitive_reflexive_closure(relation: Set):
 
 class Product:
     def __init__(self, p1: Opetope, p2: Opetope):
+        self.p1 = p1
+        self.p2 = p2
+
         order1 = Product.calculate_splus_order(p1)
         order2 = Product.calculate_splus_order(p2)
         # order1, order2 = {}, {}
 
         def dtoh(d: Dict):
+            # dict to a "hashable dict" - tuple of tuples(key, value)
             return tuple([(k, frozenset(v)) for k, v in d.items()])
 
         b, s = product(p1, p2, dtoh(order1), dtoh(order2))
@@ -230,3 +239,9 @@ class Product:
             ordering[sub_ope.level] |= {(sub_ope, sub_ope)}
 
         return {k: transitive_reflexive_closure(r) for k, r in ordering.items()}
+
+    def save(self, path=""):
+        if not path:
+            path = os.path.join(".", f"product-{len(self.p1._all_subopetopes)}-{len(self.p2._all_subopetopes)}.pickle")
+        with open(path, "wb") as f:
+            pickle.dump(self, f)
