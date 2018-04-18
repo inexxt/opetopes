@@ -13,7 +13,7 @@ from typing import Set, List, Tuple, FrozenSet, Dict
 
 import pickle
 import os
-
+import time
 
 
 all_results = set()
@@ -242,6 +242,6 @@ class Product:
 
     def save(self, path=""):
         if not path:
-            path = os.path.join(".", f"product-{len(self.p1._all_subopetopes)}-{len(self.p2._all_subopetopes)}.pickle")
+            path = os.path.join(".", "pickles", f"product-{len(self.p1._all_subopetopes)}-{len(self.p2._all_subopetopes)}-{time.time()}.pickle")
         with open(path, "wb") as f:
             pickle.dump(self, f)

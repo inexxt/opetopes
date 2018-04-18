@@ -4,3 +4,4 @@ __pycache__/
 vpypy
 .ipynb_checkpoints/
 *.pickle
+venv
