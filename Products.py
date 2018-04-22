@@ -9,7 +9,7 @@ except:
 
 from Opetope import Opetope, Face, flatten, NegCounter, first
 
-from typing import Set, List, Tuple, FrozenSet, Dict
+from typing import Set, List, Tuple, FrozenSet, Dict, Tuple
 
 import pickle
 import os
@@ -21,26 +21,24 @@ all_missed = []
 all_not_missed = []
 
 
-DEBUG = False
+DEBUG = True
 
-def is_in_order(b, target_out, order):
-    if (b.level < target_out.level):
-        # return all(is_in_order(b, t, order) for t in target_out.ins)
-        return True
-    d_order = dict(order)
-    return all(any((bi, ti) in d_order[bi.level] for ti in target_out.ins) for bi in (b.ins if b.level else [b]))
+order = set()
 
-def build_possible_opetopes(op, building_blocks, P, Q, orderP, orderQ):
+def is_in_order(b, target_out):
+    return all(any((bi, ti) in order for ti in target_out.ins) for bi in b.ins)
+
+def build_possible_opetopes(op, building_blocks, P, Q):
     # build all possible opetopes which have the codomain == op
     # and are constructed only from elems
     
     # and proceed from here by DFS
-    results = DFS(frozenset([op.out]), frozenset(), frozenset(building_blocks), op, P, Q, orderP, orderQ)
+    results = DFS(frozenset([op.out]), frozenset(), frozenset(building_blocks), op, P, Q)
     return results
 
 
 @lru_cache(maxsize=None)
-def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope, orderP, orderQ):
+def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope):
 
     if target_out.level < 1:
         return set()
@@ -63,11 +61,9 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
         for i in current_ins:
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
-            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes() and \
-               is_in_order(b.p1, target_out.p1, orderP) and \
-               is_in_order(b.p2, target_out.p2, orderQ):
-
-                all_missed.append(1)
+            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes():
+                if not is_in_order(b, target_out):
+                    continue
                 new_ins = frozenset({*current_ins, *b.ins} - {i})
                 new_used = frozenset([*used, b])
                 
@@ -76,13 +72,13 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
                 results |= DFS(current_ins=new_ins,
                             used=new_used,
                             building_blocks=building_blocks,
-                            target_out=target_out, P=P, Q=Q, orderP=orderP, orderQ=orderQ)
+                            target_out=target_out, P=P, Q=Q)
 
     return results
 
 @lru_cache(maxsize=None)
 # todo change Set[Face] to OpetopicNet, imposing appropriate restrictions
-def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
+def product(P: Opetope, Q: Opetope) -> (Set[Face], Set[Face]):
 
     # if DEBUG:
     #     print("Now analyzing opetopes {} and {}".format(P, Q))
@@ -106,9 +102,11 @@ def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
     s1s2 = itertools.product(subs1, subs2)
     for (s1, s2) in s1s2: # FIXME remove sorted
         if (s1, s2) != (P, Q) and (s1.level, s2.level) not in [(0, 1), (0, 0), (1, 0)]:
-            (big, small) = product(s1, s2, orderP, orderQ)
+            big, small = product(s1, s2)
             small_faces |= big | small # big faces from subopetope are small faces in here
     
+    add_to_splus_order(order, small_faces) # ugly but necessary non-pure function
+
     # minimal dimension of such a face is k = max(dim(P), dim(Q))
     k = max(P.level, Q.level)
     
@@ -118,9 +116,11 @@ def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
     # special case when we product two arrows and there is big face from the beginning - FIXME
     if P.level == 1 and Q.level == 1:
         big_faces |= {Face.from_arrow_and_arrow(P, Q)}
-
+    
     # we proceed until there is no new face
     while True:
+        add_to_splus_order(order, big_faces) # ugly but necessary non-pure function
+    
         # we have constructed all big faces of dimension < l
         # we now proceed to faces dimension l
         
@@ -150,7 +150,7 @@ def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
             # I think it is enough to build just from the stuff that has the right dimension
             # eg, equal to dim(f)
             building_blocks = {s for s in small_faces | big_faces if s.level == f.level and f != s}
-            new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q, orderP=orderP, orderQ=orderQ)
+            new_opetopes |= build_possible_opetopes(op=f, building_blocks=building_blocks, P=P, Q=Q)
         
 
         if not new_opetopes and l > 1:  # checking for l > 1 for special case when we product two arrows
@@ -158,18 +158,22 @@ def product(P: Opetope, Q: Opetope, orderP, orderQ) -> (Set[Face], Set[Face]):
             return  (big_faces, small_faces)
         
         big_faces |= new_opetopes
+
         l += 1
 
 
-def transitive_reflexive_closure(relation: Set):
+def transitive_reflexive_closure(relation: Set, new_elems: Set):
     closed_rel = set()
     closed_rel |= relation
 
     while True:
-        added_elems = {(x, z) for (x, y) in closed_rel for (w, z) in closed_rel if y == w}
+        added_elems = {(x, z) for (x, y) in new_elems for (w, z) in closed_rel if y == w}
+        added_elems |= {(x, z) for (x, y) in closed_rel for (w, z) in new_elems if y == w}
+            
         if not added_elems - closed_rel:
             break
         closed_rel |= added_elems
+        new_elems |= added_elems
 
     closed_rel |= {(x, x) for (x, _) in closed_rel}
     closed_rel |= {(x, x) for (_, x) in closed_rel}
@@ -177,20 +181,39 @@ def transitive_reflexive_closure(relation: Set):
     return closed_rel
 
 
+def calculate_splus_order(opetope: Face) -> Set[Tuple[Face, Face]]:
+    """"partial order on subopetopes of equal dimension
+    x <= y, x.level == y.level =: p if there is a sequence of opetopes o_1, ... o_n of levels p + 1, such that
+     - o_(k+1).out in o_k.ins
+     - y in o_n.ins
+     - x == o_1.out
+    + transitive-reflexive closure of said relation"""
+    order = set()
+    
+    for sub_ope in opetope.all_subopetopes():
+        if sub_ope.level:
+            order |= {(sub_ope.out, i) for i in sub_ope.ins}
+        order |= {(sub_ope, sub_ope)}
+    
+    return order
+
+def add_to_splus_order(order, faces):
+    new_elems = set()
+    for f in faces:
+        if not (f, f) in order:
+            new_elems |= calculate_splus_order(f)
+
+    if new_elems:
+        # big computational overhead
+        order |= new_elems
+        order |= transitive_reflexive_closure(order, new_elems)
+
 class Product:
     def __init__(self, p1: Opetope, p2: Opetope):
         self.p1 = p1
         self.p2 = p2
 
-        order1 = Product.calculate_splus_order(p1)
-        order2 = Product.calculate_splus_order(p2)
-        # order1, order2 = {}, {}
-
-        def dtoh(d: Dict):
-            # dict to a "hashable dict" - tuple of tuples(key, value)
-            return tuple([(k, frozenset(v)) for k, v in d.items()])
-
-        b, s = product(p1, p2, dtoh(order1), dtoh(order2))
+        b, s = product(p1, p2)
         self.faces = b | s
         print("Evals ", len(all_missed))
 
@@ -226,23 +249,6 @@ class Product:
                     flag = True
             all_faces -= used
         return not all_faces
-
-    @staticmethod
-    def calculate_splus_order(opetope):
-        """"partial order on subopetopes of equal dimension
-        x <= y, x.level == y.level =: p if there is a sequence of opetopes o_1, ... o_n of levels p + 1, such that
-         - o_(k+1).out in o_k.ins
-         - y in o_n.ins
-         - x == o_1.out
-        + transitive-reflexive closure of said relation"""
-        ordering = defaultdict(set)
-
-        for sub_ope in opetope.all_subopetopes():
-            if sub_ope.level:
-                ordering[sub_ope.level - 1] |= {(sub_ope.out, i) for i in sub_ope.ins}
-            ordering[sub_ope.level] |= {(sub_ope, sub_ope)}
-
-        return {k: transitive_reflexive_closure(r) for k, r in ordering.items()}
 
     def save(self, path=""):
         if not path:
