@@ -23,6 +23,13 @@ all_not_missed = []
 
 DEBUG = False
 
+def is_in_order(b, target_out, order):
+    if (b.level < target_out.level):
+        # return all(is_in_order(b, t, order) for t in target_out.ins)
+        return True
+    d_order = dict(order)
+    return all(any((bi, ti) in d_order[bi.level] for ti in target_out.ins) for bi in (b.ins if b.level else [b]))
+
 def build_possible_opetopes(op, building_blocks, P, Q, orderP, orderQ):
     # build all possible opetopes which have the codomain == op
     # and are constructed only from elems
@@ -34,8 +41,6 @@ def build_possible_opetopes(op, building_blocks, P, Q, orderP, orderQ):
 
 @lru_cache(maxsize=None)
 def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope, orderP, orderQ):
-    d_orderP = dict(orderP)
-    d_orderQ = dict(orderQ)
 
     if target_out.level < 1:
         return set()
@@ -58,10 +63,9 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
         for i in current_ins:
             # if DEBUG:
             #     print("Now focusing on b: {} u: {}".format(b, i))
-            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes() and True:
-                if not ((b.p1.level < target_out.p1.level or all(any((bi, ti) in d_orderP[bi.level] for ti in target_out.p1.ins) for bi in b.p1.ins)) and \
-                    (b.p2.level < target_out.p2.level or all(any((bi, ti) in d_orderQ[bi.level] for ti in target_out.p2.ins) for bi in b.p2.ins))):
-                    continue
+            if i == out(b) and i.p1 in P.all_subopetopes() and i.p2 in Q.all_subopetopes() and \
+               is_in_order(b.p1, target_out.p1, orderP) and \
+               is_in_order(b.p2, target_out.p2, orderQ):
 
                 all_missed.append(1)
                 new_ins = frozenset({*current_ins, *b.ins} - {i})
