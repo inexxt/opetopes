@@ -1,0 +1,66 @@
+Prezentacja opetopy
+
+1. Teoria kategorii
+ Taki inny sposób patrzenia na struktury matematyczne - "z zewnątrz" a nie "od wewnątrz"
+ Charakteryzacja obiektów przez własności uniwersalne: przykład ze zbiorem pustym, przykład ze zbiorem jednoelementowym
+ (to jest z dokładnością do izomorfizmu - w kategorii zbiorów i funkcji nie ma struktury, zbiory równoliczne są izomorficzne).
+
+ Można w ten sposób patrzeć na dużo własności - na przykład na produkty. Diagram produktu - taki obiekt, przez który faktoryzują się pary funkcji <f,g> do <A, B>. Wydaje się oczywiste... sprawdźmy dla topologii. Topologia produktowa (przedziałowa jest zła, bo przekształcenie f(x) = (x,x,x...) [w kostkę Hilberta] nie jest ciągłe - mimo, że wszystkie komponenty są), weźmy topologię produktową - fajnie, mamy twierdzenie Tichonowa.
+
+ Ogólnie - charakteryzacja przez własność uniwersalną pozwala rozumieć, że różne konstrukcje w różnych gałęziach matematyki tak naprawdę sprowadzają się do tego samego. Grupy, pierścienie, różne struktury algebraiczne, Top, Top*... logika? Produkt jako infimum w algebrze Boola (algebrze Heytinga).
+
+ No, więc możemy uznać, że produkt w dowolnej kategorii to właśnie coś takiego. Lekki problem, że produkt nie zawsze istnieje - ale w pewnych szczególnych klasach przypadków wiemy na pewno, że istnieje (kategoria kartezjańsko zamknięta - produkty (w tym produkt pusty - terminal object - można sformalizować przez granice, ale to nie teraz)). Jednym z przypadków takich kategorii ccc są presnopy nad C - kategorią małą. (dowód idzie jakoś przez lemat Yonedy, ale nie pamiętam jak dokładnie).
+
+ Czyli wniosek z pierwszej części prezentacji - wiemy, że produkty istnieją, wiemy, jaką spełniają własność uniwersalną (ale może wcale nie być tak łatwo przejść znowu do reprezentacji konkretnej, żeby pokazać palcem, co jest produktem). - *to można wrzucić na tablicę, bo do tego wrócimy*.
+
+2. Przerwa na modele
+ Modele teorii to obiekty, które interpretują jakoś jej język i spełniają twierdzenia. Na przykład możemy mówić o modelu grupy - mamy aksjomaty, bierzemy sobie grupę permutacji - interpretuje jakoś symbol "*" w języku.
+ Jakiś czas temu zorientowano się, że modele mogą być ciekawe. Przykład: geometrie nieeuklidesowe - proste na sferze spotykają się.
+ Ale to wszyscy wiedzą. Ciekawszy przykład: modele teorii mnogości. Super twierdzenie - Lowenheim-Skolem - że jeśli istnieje model, to istnieje model przeliczalny. Paradoks Skolema(?).
+ W każdym razie ludzie szukają ciekawych modeli. 
+ My szukamy modelu dla homotopy type theory - dla teorii typów Martina-Lofa z dołożonym univalence axiom.
+ Czym jest w ogóle ta teoria? To jest jakiś system formalny. Czyli mamy napisy, mamy reguły formowania kolejnych napisów. Analogicznie do logiki pierwszego rzędu. Więcej: o typach myślimy jako o predykatach. Elementy typów to dowody predykatów. Mamy izomorfizm (Lambeka-)Currego-Howarda, który nam mówi o tym, że tak naprawdę termy rachunku lambda z typami i dowody w logice intuicjonistycznej (i Lambek - morfizmy w obiekty=typy w kategoriach kartezjańsko zamkniętych) są tym samym, że można sobie tłumaczyć z jednego języka na drugi - trzy formalizmy tego samego.
+ Logika intuicjonistyczna: logika konstruowalności. Tak jak normalna logika, tylko bez prawa wyłączonego środka. Żeby coś mieć, musimy to skonstruować.
+ Rachunek lambda z typami. Rachunek lambda - inny system formalny. Mamy lambda termy - napisy, mamy zasady redukcji (beta, eta, ...) które mówią, jak możemy przepisywać te termy. Przykład lambda termu: myślimy o tym jak o funkcji, która się wykonuje.
+ Tutaj wchodzą problemy z równością. Ogólnie mamy w matematyce tak naprawdę dwa typy równości. Równość intencjonalna i ekstensjonalna. W ZFPC - aksjomat ekstensjonalności, że to są dosłownie takie same równości. Ale my chcemy oprzeć nasz system formalny na rachunku lambda. Mamy dwie funkcje - jedna robi x*2 + 2, druga robi (x+1)*2. Nie chcemy mówić, że to są te same funkcje - obliczenia, które wykonują, są inne - ale z drugiej strony, wyniki są te same.
+ Inaczej: jeśli ktoś nam da funkcję napisaną w C - w jaki sposób, możemy sprawdzić, że jest ona równa drugiej funkcji? No możemy sprawdzić, czy kod źródłowy jest taki sam - jeśli jest, to fajnie, cieszymy się. Jeśli nie jest - well, mamy problem, bo nie ma ogólnego sposobu, żeby sprawdzić, że są równe (ok, nie przejmując się detalami, że realne komputery są finitystyczne). Nie można nawet sprawdzić tak prostego faktu, czy każda z tych funkcji się w ogóle zatrzyma kiedykolwiek (problem stopu), a co dopiero równości wyników. Ale - można udowodnić, że są równe, używając argumentu w konkretnym przypadku.
+ No, to mamy dwa typy równości. Jedna idzie wprost po reprezentacji, druga po dowodzie. W systemie Martina-Lofa są reprezentowane jako judgemental i propositional equality.
+ Univalence axiom(?). Mówi coś o równości w typach zależnych. Typy zależne - zbyt długa opowieść. No i sam jeszcze nie umiem tego dobrze wytłumaczyć.
+ Ale w ogóle - po co ta logika? Stara jest zupełnie dobra. Nie do końca. Stara się nie da dobrze automatyzować komputerowo. Większość systemów do wspomagania/dowodzenia korzysta z intuicjonistycznej, bo tam się generalnie konstruuje rzeczy - popularnie Coq, jeszcze parę innych. Dowód<->program. Intuicja: program jak ma strukturę "a lub b", to musi wiedzieć, czy a, czy b, żeby robić cokolwiek dalej.
+
+3. Kompleksy symplicjalne
+ Dwa słowa o kompleksach symplicjalnych. Sympleks - uogólnienie "trójkąta" - homeomorficznie sfera n-wymiarowa. Kompleksy symplicjalne - takie trójkąty posklejane wzdłuż krawędzi. Na razie myślimy geometrycznie.
+ 
+ Definicja formalna: kompleks symplicjalny to zbiór sympleksów taki, że przecięcie dowolnych dwóch też jest sympleksem, jest ścianą w obu, i należy do kompleksu.
+
+ Ok, możemy teraz abstrakcjonować - abstrakcyjny kompleks symplicjalny to zbiór X_0 wierzchołków i kolekcja zbiorów X_k dla każdego k - podzbiorów k-elementowych X_0 takich, że dla x in X_k, wszystkie podzbiory j<k-elementowe x są w X_j. Czyli pozbyliśmy się geometrii, mamy minimalną informację potrzebną do zbudowania kompleksu. (jeśli dwa konkretne sympleksy mają takie same opisy jw, to są homeo). 
+ Mapy kompleksów - utożsamiają sympleksy z sympleksami (wystarczy na wierzchołkach).
+
+ Dobra, to teraz myślimy o wierzchołkach kompleksu jako ponumerowanych >rosnąco< - przechodzimy tym samym do zbiorów symplicjalnych. Sympleks mogą tworzyć tylko [v_i0, v_i1, .. v_in] - ponumerowane rosnąco wierzchołki. W ten sposób dalej możemy opisać wszystkie sympleksy w zbiorze symplicjalnym, ale tym razem tylko na jeden sposób. Wtedy możemy myśleć o zbiorze symplicjalnym jako o kolekcji obrazów ze wszystko-wymiarowych sympleksów w kolekcję wierzchołków (kolekcję sub-sympleksów) zbioru symplicjalnego.
+
+ Więc - o sympleksie myślimy jako o skończonym liniowym porządku - {1,2,... n}. Morfizmy (face mapy i włożenia) - funkcje monotoniczne. Czyli mamy bardzo prostą kategorię. Widać, że morfizmy spełniają aksjomaty kategorii. Kategoria mała - tak jak mówiliśmy, wtedy mamy istnienie produktów w presnopach.
+ Teraz czym w ogóle tu są presnopy. Presnopy nad C to kategoria funktorów z kategorii C^op do Set.
+ Nowe słowo - funktor. Można powiedzieć - homomorfizm kategorii. Czyli musimy mieć zachowane złożenia i identyczności na morfizmach. Nic specjalnego.
+ C^op - oznacza kategorię odwrotną do danej, czyli po prostu bierzemy graf i odwracamy wszystkie strzałki.
+ Jak się te presnopy mają do zbiorów symplicjalnych?
+ Funktor(sympleks) to zbiór sympleksów o takim kształcie w zbiorze symplicjalnym.
+ Funktor(face map s1 -> s2) - kontrawariantny - to jakaś funkcja, która ma iść : {zbiór kształtów s2} -> {zbiór kształtów s1}. No, to kształtowi przyporządkowuje jego ściany. Wcześniej mówiliśmy, że można myśleć o zbiorze symplicjalnym jako o zbiorze obrazów ze wszystko-wymiarowych sympleksów w kolekcję sub-sympleksów tego zbioru.
+ Dobra, to teraz składając to wszystko - mamy kategorię presnopów. Mamy tam produkty. Generalnie niezbyt wiadomo, jak policzyć produkt w sensie geometrycznym - wiadomo tylko, że ma własnośc uniwersalną, że morfizmy się faktoryzują. Na razie to jest dla nas abstrakcyjne AxB, bez żadnego geometrycznego wyobrażenia. (okazuje się przy okazji, że nie trzeba badać wszystkich obiektów i par map, wystarczy takie z funktorów reprezentowalnych (tutaj może dygresja co to jest funktor reprezentowalny, jeśli starczy czasu) - w skrócie tych, które są sympleksami.
+
+4. Opetopy
+ Zbiory symplicjalne, globularne, kubiczne. Uogólnienie - opetopy. Najpierw obrazkowo. Reprezentacja "składania". Formalizm - wielowymiarowe drzewa. Bez definicji. Obrazek Finstera.
+ Zbiory opetopowe - analogia do zbiorów symplicjalnych przed chwilą. Kategoria kształtów, kategoria presnopów. Jakie w kategorii kształtów są mapy? Na pewno są włożenia. Ale może coś jeszcze? Do tego zaraz.
+ Dobra, to chcemy wiedzieć, czym są produkty. Może można je sobie jakoś ładnie zwizualizować? 
+ Diagram. Produkt dwóch punktów. Produkt dwóch strzałek. Załóżmy, że rozważamy tylko włożenia jako morfizmy. Wtedy -> kształt. Ale nie jest ściągalny. Chcemy, żeby był ściągalny, z dwóch przestrzeni ściągalnych nie chcemy dostać czegoś nieściągalnego. Powód dość zawiły, ale intuicyjnie jasne - cały czas pod spodem mamy topologię.
+ Produkt strzałki i oczka. Profesor zawadowski wymyślił produkty strzałki ze wszystkim.
+ My teraz wymyśliliśmy produkty dowolnych. Nie takie proste, jak to zbudować, bo bardzo szybko rosną. W teorii w ogóle nie wiadomo, czy są skończone - przecież mamy tu w ogóle nieskończone zbiory opetopów. I opetopy są dużo bardziej skomplikowane niż sympleksy - dwuwymiarowych jest już nieskończenie wiele. Widać na przykładzie to, co mówiliśmy na początku - że wcale nie tak prosto z własności uniwersalnej dostać konkretną rzecz. Uwaga: są superduże. Na przykład produkt (dwuwymiarowy 4 w dziedzinie x dwuwymiarowy 5 w dziedzinie) ma 100k ścian.
+ Future work: zrozumieć konkretniej, jak działają te produkty. Udowodnić, że są ściągalne.
+ Potem - używając takich zbiorów będziemy chcieli budować model dla HoTT. Czyli uniwersum będzie jakiś zbiór opetopowy. Czyli takie posklejane opetopy. Jaki konkretnie zbiór - to do wymyślenia. Ale jest już model w zbiorach symplicjalnych, podobno można przenieść prawie żywcem do opetopów. A potem - badanie, jakie własności ma teoria.
+ Problem ze zbiorami symplicjalnymi - wszystkie 2- i więcej strzałki są odwracalne. (wstęp - 2-kategorie, omega-kategorie).
+ 
+5.
+ Koniec. Do wyniesienia:
+ 1) Istnieje teoria kategorii. Ma inne spojrzenie na rzeczywistość. Można robić produkty (sumy, "zbiory puste" i dużo innych rzeczy) kompletnie abstrakcyjnie, a potem patrzeć czym naprawdę są. Tylko że to patrzenie czym naprawdę są może być trudne.
+ 2) Istnieją inne niż standardowa systemy logiczne i są powszechnie używane (w coqu na przykład). Poza tym - logicy poszukują modeli dla teorii, bo można tam dostrzec różne śmieszne rzeczy. 
+ 3) Zbiory symplicjalne - cała droga od analitycznego sympleksu/zbioru symplicjalnego - strasznie duża złożoność opisu - poprzez topologiczny - jako typ homeo - przez abstrakcyjny - jako zbiór wierzchołków - do kategoryjnego - jako funktor.
+ 4) Opetopy - fajne struktury z ciekawymi własnościami. Miejsce dla programowania w matematyce - generowanie insightów.
