@@ -240,6 +240,9 @@ class Opetope:
         return hash(self._str)
 
     def __getstate__(self):
+        """There is a 10-years-old bug in python pickler
+        that requires this ugly fix: https://bugs.python.org/issue1761028
+        """
         slots = self.__slots__
 
         if "splus_order" in slots:
