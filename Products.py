@@ -1,6 +1,6 @@
 import itertools
 
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 try:
     from fastcache import lru_cache
@@ -16,12 +16,28 @@ import os
 import time
 
 
+DEBUG = True
+
+
+if DEBUG:
+    print("Debug legend:")
+    print("m-face is a face that projects both on m_P and m_Q")
+
+    print("#1 - num of m-faces")
+    print("#2 - num of m-faces that have m-face in domain")
+    print("#3 - num of m-faces that have m-face in codomain\n"
+          "     don't have m-face in domain, and have something that projects on m_P and *\n"
+          "     and second something that projects on * and m_Q\n"
+          "     where * != m_P (/m_Q)")
+
+    print("Counter(a:b) says that there are b faces of dimension a")
+    print("\n")
+    
 all_results = set()
 all_missed = []
 all_not_missed = []
 
 
-DEBUG = True
 
 order = set()
 
@@ -37,6 +53,30 @@ def build_possible_opetopes(op, building_blocks, P, Q):
     return results
 
 
+def print_debug_info(all_results: Set[Face], P: Face, Q: Face):
+    if DEBUG:
+        print("Current face count: {}".format(len(all_results)))
+        # print(new_face.ins, new_face.out)
+        # debug_faces.add(new_face)
+        big_face = lambda ll: list(filter(lambda t: t.p1 == P and t.p2 == Q, ll))
+        big_face_p = lambda ll: list(filter(lambda t: t.p1 == P and (not t.p2 == Q), ll))
+        big_face_q = lambda ll: list(filter(lambda t: (not t.p1 == P) and t.p2 == Q, ll))
+        
+        main_faces = big_face(all_results)
+
+        faces1 = main_faces
+        faces2 = [t for t in main_faces if big_face(t.ins)]
+        faces3 = [t for t in main_faces if not big_face(t.ins)
+                                           and big_face_p(t.ins) 
+                                           and big_face_q(t.ins)]
+        dims = lambda x: Counter(map(lambda t: t.level, x))
+        print("#1 faces - {}".format(dims(faces1)))
+        print("#2 faces - {}".format(dims(faces2)))
+        print("#3 faces - {}".format(dims(faces3)))
+
+    return
+
+
 @lru_cache(maxsize=None)
 def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: FrozenSet[Face], target_out: Face, P: Opetope, Q: Opetope):
 
@@ -46,10 +86,9 @@ def DFS(current_ins: FrozenSet[Face], used: FrozenSet[Face], building_blocks: Fr
     if Face.verify_construction(p1=P, p2=Q, ins=used, out=target_out):
         new_face = Face(p1=P, p2=Q, ins=used, out=target_out)
         all_results.add(new_face)
-        if DEBUG:
-            print("Current face count: {}".format(len(all_results)))
-        #     print(new_face.ins, new_face.out)
-        #     debug_faces.add(new_face)
+
+        print_debug_info(all_results, P, Q)
+
         return {new_face}
 
     # ugly hack, but points do not have themselves as outs, so it is needed
