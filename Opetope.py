@@ -239,6 +239,28 @@ class Opetope:
     def __hash__(self):
         return hash(self._str)
 
+    def __getstate__(self):
+        slots = self.__slots__
+
+        if "splus_order" in slots:
+            slots.remove("splus_order")
+
+        if "_all_subopetopes" in slots:
+            slots.remove("_all_subopetopes")
+
+        if "_all_subouts" in slots:
+            slots.remove("_all_subouts")
+
+        d = {attr: getattr(self, attr) for attr in slots
+             if hasattr(self, attr)}
+        
+        return d
+
+    def __setstate__(self, state):
+        for k, v in state.items():
+            setattr(self, k, v)
+
+
     @staticmethod
     def is_valid_morphism(op1: 'Opetope', op2: 'Opetope') -> bool:
         """
@@ -366,3 +388,19 @@ class Face(Opetope):
 
     def __repr__(self):
         return self._str
+
+    def __getstate__(self):
+        slots = self.__slots__ + super().__slots__
+
+        if "splus_order" in slots:
+            slots.remove("splus_order")
+        
+        d = {attr: getattr(self, attr) for attr in slots
+             if hasattr(self, attr)}
+        
+        return d
+
+    def __setstate__(self, state):
+        for k, v in state.items():
+            setattr(self, k, v)
+

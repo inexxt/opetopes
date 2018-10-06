@@ -11,7 +11,7 @@ from Opetope import Opetope, Face, flatten, NegCounter, first
 
 from typing import Set, List, Tuple, FrozenSet, Dict, Tuple
 
-import pickle
+import dill as pickle
 import os
 import time
 
@@ -32,7 +32,7 @@ if DEBUG:
 
     print("Counter(a:b) says that there are b faces of dimension a")
     print("\n")
-    
+
 all_results = set()
 all_missed = []
 all_not_missed = []
